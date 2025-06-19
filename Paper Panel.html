@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAPER PANEL MEMBER LOGIN ||| ICTwithLS ||| LMS</title>
+    <link rel="icon" type="image/X-icon" href="Photos/short text logo.jpg">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <img class="mainimg" src="Photos/Long text logo.jpg" alt="long text logo">
+
+    <h1 class="h1"><b>Paper Class</b></h1>
+    <h2 class="h2"><b>Paper Panel Member</b></h2>
+<br>
+    <hr>
+    <h3 class="h3">...Paper Guides...</h3>
+    <div class="ul">
+    <ul>
+        <li>Every Week upload a new Paper.</li>
+        <li>Paper Should <b>write with in Monday to Friday.</b></li>
+        <li>You can <b>Download Student Answers</b> by "Get The Paper" button in the bellow.</li>
+        <li>You can <b>Download Marking Scheme </b>by "Get The Marking Scheme" button in the bellow.</li>
+        <li>We Should send the <b>answer sheets before sunday 3.00pm</b>.</li>
+        <br>
+        <li>Paper Times As Follows;</li>
+        <ul><li><b>MCQ Paper - 50 Min</b></li>
+        <li><b>2nd Paper - 1.5 H</b></li></ul>
+
+        <li>After Marks the papers; <b>You must submit the marks using the "Submit the Studnts Marks to Database" button in bellow</b></li>
+    </ul></div>
+<hr>
+<br>
+<h3 class="h3">...Paper Details...</h3>
+<br><br>
+    <div class="btn">
+    <a href="https://drive.google.com/drive/folders/1x6eZztw5spa9KEQ8kYLPzqDbyaI6OHt2?usp=sharing"><button class="B1"><b>Get The Paper</b></button></a>
+    <a href="https://drive.google.com/drive/folders/1AYMyjbv7EErYt8yvP8acaNenQLJciEMe?usp=sharing"><button class="B4"><b>Get The Marking Scheme</b></button></a>
+    <br><br>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfv9D2hET7E1UP2z1oDStGrUe0DQ0jg6aja9Gt9PAmhd5ltVQ/viewform?usp=sharing"><button class="B3"><b>Edit The MCQ Answers</b></button></a>
+    <a href="https://wa.me/message/LIJOKHDYARPWI1"><button class="B2"><b>Mark The Answer Papers</b></button></a>
+
+    <br><br>
+    <hr>
+    <br>
+    <h3 class="h3">...E-Supporters...</h3>
+        <a href="https://chatgpt.com/"><button class="B5"><b>ChatGPT</b></button></a>
+        <button class="B6" id="myBtn1"><b>Calculator</b></button>
+        <button class="B7" id="myBtn"><b>Submit the Studnts Marks to Database</b></button>
+
+        <br><br><br>
+    <h4 class="h4">...Thank You...</h4>
+
+
+<!-- Database -->
+        <div>
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                    <p>
+                        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfIihvksxp0bR9ZPDaJ5clLwjlDpfqrJOr0sp6IaL1QyqTEag/viewform?embedded=true" width="800" height="500" frameborder="" marginheight="0" marginwidth="0">Loading…</iframe>
+                    </p>
+            </div></div>
+        </div>
+
+
+<!-- Calculator -->
+<div>
+    <!-- The Modal -->
+    <div id="myModal1" class="modal1">
+
+    <!-- Modal content -->
+    <div class="modal-content1">
+        <span1 class="close1">&times;</span>
+            <p>
+                Comming Soon...
+            
+            </p>
+    </div></div>
+</div>
+
+
+<br><br><br><br><br>
+    <center><br><small> <b><font color='White'>©2024 All Right Reserved. <br>Powered by <a href='https://lscomputertechnology.000webhostapp.com/'><font color='Yellow'>L.S.COMPUTER TECHNOLOGH.</a>.</font></font></b></small></center>
+
+
+<script>
+    // Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+//calculator
+    // Get the modal
+    var modal1 = document.getElementById("myModal1");
+
+// Get the button that opens the modal
+var btn1 = document.getElementById("myBtn1");
+
+// Get the <span> element that closes the modal
+var span1 = document.getElementsByClassName("close1")[0];
+
+// When the user clicks the button, open the modal 
+btn1.onclick = function() {
+  modal1.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span1.onclick = function() {
+  modal1.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal1) {
+    modal1.style.display = "none";
+  }
+}
+
+//maths in calculator
+function addToDisplay(value) {
+            document.getElementById('display1').value += value;
+        }
+
+        function clearDisplay() {
+            document.getElementById('display1').value = '';
+        }
+
+        function calculate() {
+            var display1 = document.getElementById('display1');
+            try {
+                display1.value = eval(display1.value);
+            } catch (error) {
+                display1.value = 'Error';
+            }
+        }
+</script>
+
+
+</body>
+</html>

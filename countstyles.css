@@ -1,0 +1,158 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: black;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.timer-container {
+  width: 1000px;
+  background: 'linear-gradient(135deg, #ff7e5f, #feb47b)';
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  position: relative;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.input-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+input {
+  font-size: 1.5rem;
+  width: 150px;
+  text-align: center;
+  background: black;
+  color: white;
+  border: 2px solid #f39c12;
+  border-radius: 5px;
+  margin: 0 5px;
+  padding: 10px;
+  font-family:'Hiruko pro';
+}
+
+input:focus {
+  outline: none;
+}
+
+span {
+  font-size: 1.5rem;
+  margin-top: 10px;
+  color: #f39c12;
+}
+
+/* Circle Timer Display */
+.timer-display {
+  position: relative;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.circle {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  border: 10px solid blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  position: relative;
+}
+
+#time-text {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-size:60px;
+  font-family:'Hiruko pro';
+}
+
+/* Controls */
+.controls button {
+  background-color: #f39c12;
+  color: black;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease-in-out;
+  font-family:'Hiruko pro';
+}
+
+.controls button:disabled {
+  background-color: #7f8c8d;
+}
+
+.controls button:hover {
+  background-color: #e67e22;
+}
+
+/* Fullscreen Button */
+#fullscreen {
+  background-color: #3498db;
+}
+
+#fullscreen:hover {
+  background-color: #2980b9;
+}
+
+/* Animation when time is up */
+.message {
+  margin-top: 20px;
+  font-size: 1.3rem;
+  color: #e74c3c;
+  display: none;
+}
+.h4{
+    color: gold;
+    font-size: 30px;
+    font-family: 'Harlow Solid';
+    text-align: center;
+    Opacity:70%
+}
+
+.vertical-text {
+    writing-mode: vertical-rl; /* Makes text vertical */
+    transform: rotate(180deg);
+    font-size:40px;
+    text-align: center;
+    border: none;
+    padding: 10px;
+    font-family:'PoetsenOne';
+    Opacity:7%;
+    color: gold;
+}
+
+.vertical-text2 {
+    writing-mode: vertical-rl; /* Makes text vertical */
+    transform: rotate(360deg);
+    font-size:40px;
+    text-align: center;
+    border: none;
+    padding: 10px;
+    font-family:'PoetsenOne';
+    Opacity:7%;
+    color: gold;
+}

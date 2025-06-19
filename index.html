@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html oncontextmenu="return false">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to ICTwithLS ||| LMS</title>
+    <link rel="icon" type="image/X-icon" href="Photos/short_text_logo.jpg">
+    <link rel="stylesheet" href="logimstyle.css">
+</head>
+<body>
+
+
+    
+
+
+<!-- Modal Alert Box -->
+<div id="alert-box" class="alert-box">
+    <div class="alert-content">
+
+
+        <img id="alert-image" class="alert-image" src="Photos/welcome.jpg" alt="Alert Image">
+        <p id="alert-message">"Welcome to the ICT class! <br> Please log in to access course materials, assignments, and updates. Stay engaged, complete your tasks on time, and don’t forget to reach out if you need any help. Let’s get learning!</p>
+
+            <a href="https://forms.gle/ttX8FQ6euJRBfRDv9"><button class="reg-btn">Student Registration</button></a>
+            <br><br>
+            <button id="ok-btn" class="ok-btn">OK</button>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <!-- Main Content -->
+    <div class="container">
+        <center><img class="mainimg" src="Photos/Long_text_logo.jpg" alt="ICTwithLS Logo for Login Portal"></center>
+        <br><br><h1><b>ICTwithLS ||| LMS</b></h1>
+        <h1>Welcome to the Login Portal</h1>
+        <br><br>
+        <div class="login-options">
+            <a href="https://script.google.com/macros/s/AKfycbyuXKJ-2ndYLeMkE4MxMCAxKhPd6JSlVrVjHJUyRA58Vx5PyuhoDJ2I3a-C9MAiEXbg/exec" class="btn"><b>Student Login</b></a>
+            <a href="https://script.google.com/macros/s/AKfycbzhm9QFj5Ohs0C4YQ09X3gD19uMdoHu8VhaomWlUUSS8JBds6JPxAPhdeAg9TjVYQuncg/exec" class="btn1"><b>Staff Login</b></a>
+        </div>
+            
+                <br><div class="vertical-text">
+                    Dreams Will Never Been Die!
+                    </div>
+                
+    </div>
+    <br><br><fieldset class="fbtn">
+        <legend>E-Tools
+    <div>
+        <a href="timer.html" class="hbtn">Timer</a>   
+        <a href="HTML_Tester.html" class="hbtn">HTML Tester</a><br>
+        <a href="https://youtube.com/@ictwithls?si=CBWVZsptKcOKGZW9" class="hbtn"target="_blank">Youtube</a>   
+        <a href="Digitalclock.html" class="hbtn">Digital Clock</a>
+    </div> </legend></fieldset>
+<br><br><br>
+<kbd>Version 2.1</kbd>
+
+    <kbd><div class="copyright"><center><br> <b><font color='White'>©2025 All Right Reserved. <br>Powered by <a href='https://lscomputertechnology.000webhostapp.com/'><font color='Yellow'>L.S.COMPUTER TECHNOLOGH</a>.</font></font></b></center></div></kbd>
+
+
+
+
+
+    <script src="snow.js"></script>
+    <script>
+
+        // Snow Effect
+        document.addEventListener("DOMContentLoaded", function() {
+            var snowContainer = document.createElement('div');
+            snowContainer.classList.add('snow');
+            document.body.appendChild(snowContainer);
+
+            var numberOfSnowflakes = 100;
+
+            for (var i = 0; i < numberOfSnowflakes; i++) {
+                var snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                var size = Math.random() * 5 + 2;
+                snowflake.style.width = size + 'px';
+                snowflake.style.height = size + 'px';
+                snowflake.style.left = Math.random() * 100 + 'vw';
+                snowflake.style.animationDuration = Math.random() * 5 + 5 + 's';
+                snowContainer.appendChild(snowflake);
+            }
+        });
+
+        // Show alert box with a custom message
+        function showAlert(message) {
+            document.getElementById("alert-message").innerText = message;
+            document.getElementById("alert-box").style.display = "flex";
+        }
+
+        // Hide the alert box when OK button is clicked
+        document.getElementById("ok-btn").onclick = function() {
+            document.getElementById("alert-box").style.display = "none";
+        };
+
+        // Example: Show an alert after 1 seconds with a custom message and image
+        setTimeout(function() {
+            showAlert("Welcome to the ICTwithLS! Please log in to access course materials, assignments, and updates. Stay engaged, complete your tasks on time, and don’t forget to reach out if you need any help. Let’s get learning!", "Photos/short text logo.jpg");
+        }, 1000);
+    </script>
+</body>
+</html>
