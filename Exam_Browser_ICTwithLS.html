@@ -763,218 +763,358 @@
 </div>
 
 <script>
-    let countdownInterval;
-    let examDuration = 3 * 3600; // 3 hours
-    const correctPassword = "174368"; 
-    const END_HOUR = 22;
-    const END_MINUTE = 15;
-    let examData = {};
 
-    // Auto-capitalize input text
-    document.addEventListener('DOMContentLoaded', function() {
-        const textInputs = document.querySelectorAll('input[type="text"]');
-        textInputs.forEach(input => {
-            input.addEventListener('input', function(e) {
-                const cursorPosition = e.target.selectionStart;
-                e.target.value = e.target.value.toUpperCase();
-                e.target.setSelectionRange(cursorPosition, cursorPosition);
-            });
+
+
+
+   
+    let countdownInterval;
+let examDuration = 3 * 3600; // 3 hours in seconds (backup duration)
+const correctPassword = "174368";
+
+// Deadline configuration - Set your specific deadline time here
+const DEADLINE_HOUR = 22;    // 24-hour format (0-23)
+const DEADLINE_MINUTE = 15;   // Minutes (0-59)
+const DEADLINE_DATE = null;  // Set specific date or null for today/tomorrow
+
+let examData = {};
+
+
+
+
+
+   
+// Auto-capitalize input text
+document.addEventListener('DOMContentLoaded', function() {
+    const textInputs = document.querySelectorAll('input[type="text"]');
+    textInputs.forEach(input => {
+        input.addEventListener('input', function(e) {
+            const cursorPosition = e.target.selectionStart;
+            e.target.value = e.target.value.toUpperCase();
+            e.target.setSelectionRange(cursorPosition, cursorPosition);
         });
     });
+});
 
-    function startExam() {
-        const name = document.getElementById("studentName").value.trim();
-        const studentId = document.getElementById("studentId").value.trim();
-        const password = document.getElementById("examPassword").value.trim();
-        const button = document.querySelector('button');
+// Calculate deadline timestamp
+function getDeadlineTimestamp() {
+    const now = new Date();
+    let deadline = new Date();
+    
+    if (DEADLINE_DATE) {
+        // If specific date is set
+        deadline = new Date(DEADLINE_DATE);
+        deadline.setHours(DEADLINE_HOUR, DEADLINE_MINUTE, 0, 0);
+    } else {
+        // Use today or tomorrow based on current time
+        deadline.setHours(DEADLINE_HOUR, DEADLINE_MINUTE, 0, 0);
+        
+        // If deadline time has passed today, set for tomorrow
+        if (now > deadline) {
+            deadline.setDate(deadline.getDate() + 1);
+        }
+    }
+    
+    return deadline.getTime();
+}
 
-        document.querySelectorAll('input').forEach(input => input.classList.remove('invalid', 'valid'));
+// Get time remaining until deadline
+function getTimeUntilDeadline() {
+    const currentTime = Date.now();
+    const deadlineTime = getDeadlineTimestamp();
+    const remaining = Math.floor((deadlineTime - currentTime) / 1000);
+    
+    if (remaining <= 0) {
+        return {
+            total_seconds: 0,
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+            formatted: "00:00:00",
+            is_expired: true,
+            is_warning: false,
+            deadline_passed: true
+        };
+    }
+    
+    const hours = Math.floor(remaining / 3600);
+    const minutes = Math.floor((remaining % 3600) / 60);
+    const seconds = remaining % 60;
+    
+    const formatted = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    
+    return {
+        total_seconds: remaining,
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds,
+        formatted: formatted,
+        is_expired: false,
+        is_warning: remaining <= 600, // Warning when 10 minutes or less
+        deadline_passed: false
+    };
+}
 
-        if (!name || !studentId || !password) {
-            if (!name) document.getElementById("studentName").classList.add('invalid');
-            if (!studentId) document.getElementById("studentId").classList.add('invalid');
-            if (!password) document.getElementById("examPassword").classList.add('invalid');
-            alert("ERROR: ALL FIELDS ARE MANDATORY");
+// Get readable deadline info
+function getDeadlineInfo() {
+    const deadlineTime = new Date(getDeadlineTimestamp());
+    const timeInfo = getTimeUntilDeadline();
+    
+    return {
+        deadline_time: deadlineTime.toLocaleString(),
+        deadline_24h: `${String(DEADLINE_HOUR).padStart(2, '0')}:${String(DEADLINE_MINUTE).padStart(2, '0')}`,
+        time_remaining: timeInfo,
+        status: timeInfo.is_expired ? "EXPIRED" : timeInfo.is_warning ? "WARNING" : "ACTIVE"
+    };
+}
+
+function startExam() {
+    const name = document.getElementById("studentName").value.trim();
+    const studentId = document.getElementById("studentId").value.trim();
+    const password = document.getElementById("examPassword").value.trim();
+    const button = document.querySelector('button');
+
+    document.querySelectorAll('input').forEach(input => input.classList.remove('invalid', 'valid'));
+
+    if (!name || !studentId || !password) {
+        if (!name) document.getElementById("studentName").classList.add('invalid');
+        if (!studentId) document.getElementById("studentId").classList.add('invalid');
+        if (!password) document.getElementById("examPassword").classList.add('invalid');
+        alert("ERROR: ALL FIELDS ARE MANDATORY");
+        return;
+    }
+
+    document.getElementById("studentName").classList.add('valid');
+    document.getElementById("studentId").classList.add('valid');
+
+    button.classList.add('loading');
+    button.textContent = 'AUTHENTICATING...';
+
+    setTimeout(() => {
+        if (password !== correctPassword) {
+            document.getElementById("examPassword").classList.add('invalid');
+            button.classList.remove('loading');
+            button.classList.add('error');
+            button.textContent = 'AUTHENTICATION FAILED';
+            setTimeout(() => {
+                button.classList.remove('error');
+                button.textContent = 'START THE EXAMINATION';
+            }, 3000);
             return;
         }
 
-        document.getElementById("studentName").classList.add('valid');
-        document.getElementById("studentId").classList.add('valid');
+        document.getElementById("examPassword").classList.add('valid');
+        button.classList.remove('loading');
+        button.classList.add('success');
+        button.textContent = 'ACCESS GRANTED - LOADING...';
 
-        button.classList.add('loading');
-        button.textContent = 'AUTHENTICATING...';
+        // Check if deadline has already passed
+        const timeInfo = getTimeUntilDeadline();
+        if (timeInfo.deadline_passed) {
+            alert(`EXAMINATION DEADLINE HAS PASSED!\nDeadline was: ${String(DEADLINE_HOUR).padStart(2, '0')}:${String(DEADLINE_MINUTE).padStart(2, '0')}`);
+            button.classList.remove('success');
+            button.classList.add('error');
+            button.textContent = 'DEADLINE PASSED';
+            return;
+        }
 
         setTimeout(() => {
-            if (password !== correctPassword) {
-                document.getElementById("examPassword").classList.add('invalid');
-                button.classList.remove('loading');
-                button.classList.add('error');
-                button.textContent = 'AUTHENTICATION FAILED';
-                setTimeout(() => {
-                    button.classList.remove('error');
-                    button.textContent = 'START THE EXAMINATION';
-                }, 3000);
-                return;
+            document.getElementById("setup").style.display = "none";
+            document.getElementById("examArea").style.display = "flex";
+            
+            const studentInfoText = `${name.toUpperCase()} (ID: ${studentId})`;
+            document.getElementById("studentInfo").textContent = studentInfoText;
+            document.getElementById("overlayStudentInfo").textContent = studentInfoText;
+
+            const iframe = document.getElementById("examPaper");
+            iframe.src = "https://drive.google.com/file/d/1pMJqV_d8kQJYf-5bP-geL-XmfguNkOQq/preview";
+
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
             }
 
-            document.getElementById("examPassword").classList.add('valid');
-            button.classList.remove('loading');
-            button.classList.add('success');
-            button.textContent = 'ACCESS GRANTED - LOADING...';
+            // Store exam data with deadline time
+            const deadlineTime = getDeadlineTimestamp();
+            const maxExamTime = Date.now() + examDuration * 1000;
+            
+            // Use whichever comes first: exam duration or deadline
+            const endTime = Math.min(deadlineTime, maxExamTime);
+            
+            examData = {
+                endTime: endTime,
+                deadlineTime: deadlineTime,
+                studentName: name,
+                studentId: studentId,
+                startTime: Date.now()
+            };
 
-            setTimeout(() => {
-                document.getElementById("setup").style.display = "none";
-                document.getElementById("examArea").style.display = "flex";
-                
-                const studentInfoText = `${name.toUpperCase()} (ID: ${studentId})`;
-                document.getElementById("studentInfo").textContent = studentInfoText;
-                document.getElementById("overlayStudentInfo").textContent = studentInfoText;
+            startCountdown();
+            
+            // Show deadline info
+            console.log('Exam started. Deadline info:', getDeadlineInfo());
+        }, 2000);
+    }, 1500);
+}
 
-                const iframe = document.getElementById("examPaper");
-                iframe.src = "https://drive.google.com/file/d/1pMJqV_d8kQJYf-5bP-geL-XmfguNkOQq/preview";
-
-                if (document.documentElement.requestFullscreen) {
-                    document.documentElement.requestFullscreen();
-                }
-
-                // Store exam data
-                const endTime = Date.now() + examDuration * 1000;
-                examData = {
-                    endTime: endTime,
-                    studentName: name,
-                    studentId: studentId
-                };
-
-                startCountdown(endTime);
-            }, 2000);
-        }, 1500);
-    }
-
-    function startCountdown(endTime) {
-        updateTimerDisplay(Math.floor((endTime - Date.now()) / 1000));
-        countdownInterval = setInterval(() => {
-            const remaining = Math.floor((endTime - Date.now()) / 1000);
-            updateTimerDisplay(remaining);
-
-            if (remaining <= 600 && remaining > 0) {
-                document.getElementById("timerDisplay").classList.add("timer-warning");
-                document.getElementById("overlayTimerDisplay").classList.add("timer-warning");
-            }
-            if (remaining <= 0) {
-                endExam(examData.studentName || "UNKNOWN");
-            }
-
-            const now = new Date();
-            if (now.getHours() > END_HOUR || 
-                (now.getHours() === END_HOUR && now.getMinutes() >= END_MINUTE)) {
-                endExam(examData.studentName || "UNKNOWN");
-            }
-        }, 1000);
-    }
-
-    function updateTimerDisplay(seconds) {
-        const h = String(Math.floor(seconds / 3600)).padStart(2,'0');
-        const m = String(Math.floor((seconds % 3600) / 60)).padStart(2,'0');
-        const s = String(seconds % 60).padStart(2,'0');
-        const timeString = `${h}:${m}:${s}`;
+function startCountdown() {
+    const updateTimer = () => {
+        const timeInfo = getTimeUntilDeadline();
         
-        document.getElementById("timerDisplay").textContent = timeString;
-        document.getElementById("overlayTimerDisplay").textContent = timeString;
-    }
-
-    function endExam(name) {
-        clearInterval(countdownInterval);
-        exitFullScreen();
-        examData = {};
-
-        document.getElementById("examArea").style.display = "none";
-        const msg = document.getElementById("finalMessage");
-        msg.querySelector("#finalMessageText").innerHTML =
-            `<strong style="color: #dc3545; font-size: 24px;">EXAMINATION TIME EXPIRED</strong><br><br>
-            CANDIDATE: <strong>${name.toUpperCase()}</strong><br><br>
-            <span style="color: #856404;">SUBMIT YOUR ANSWER SHEET TO THE SUPERVISOR IMMEDIATELY</span>`;
-        msg.classList.add("show");
-    }
-
-    function exitFullScreen() {
-        if (document.exitFullscreen) document.exitFullscreen();
-        else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
-        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-        else if (document.msExitFullscreen) document.msExitFullscreen();
-    }
-
-    // Detect when fullscreen is exited
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
-    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
-    document.addEventListener("msfullscreenchange", handleFullscreenChange);
-
-    // Detect ESC or F11 key presses
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" || e.key === "F11") {
-            setTimeout(() => {
-                if (!document.fullscreenElement && 
-                    !document.mozFullScreenElement && 
-                    !document.webkitFullscreenElement && 
-                    !document.msFullscreenElement) {
-                    showFullscreenOverlay();
-                }
-            }, 100);
+        // Update display
+        updateTimerDisplay(timeInfo.total_seconds);
+        
+        // Check for warnings
+        if (timeInfo.is_warning && timeInfo.total_seconds > 0) {
+            document.getElementById("timerDisplay").classList.add("timer-warning");
+            document.getElementById("overlayTimerDisplay").classList.add("timer-warning");
         }
-    });
-
-    function handleFullscreenChange() {
-        const isFullscreen = document.fullscreenElement || 
-                           document.mozFullScreenElement || 
-                           document.webkitFullscreenElement || 
-                           document.msFullscreenElement;
         
-        if (!isFullscreen && document.getElementById("examArea").style.display !== "none") {
-            showFullscreenOverlay();
-        } else {
+        // End exam if time expired
+        if (timeInfo.is_expired || timeInfo.total_seconds <= 0) {
+            endExam(examData.studentName || "UNKNOWN", "DEADLINE REACHED");
+        }
+    };
+    
+    // Initial update
+    updateTimer();
+    
+    // Update every second
+    countdownInterval = setInterval(updateTimer, 1000);
+}
+
+function updateTimerDisplay(seconds) {
+    const h = String(Math.floor(seconds / 3600)).padStart(2,'0');
+    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2,'0');
+    const s = String(seconds % 60).padStart(2,'0');
+    const timeString = `${h}:${m}:${s}`;
+    
+    document.getElementById("timerDisplay").textContent = timeString;
+    document.getElementById("overlayTimerDisplay").textContent = timeString;
+}
+
+function endExam(name, reason = "TIME EXPIRED") {
+    clearInterval(countdownInterval);
+    exitFullScreen();
+    
+    const deadlineInfo = getDeadlineInfo();
+    examData = {};
+
+    document.getElementById("examArea").style.display = "none";
+    const msg = document.getElementById("finalMessage");
+    msg.querySelector("#finalMessageText").innerHTML =
+        `<strong style="color: #dc3545; font-size: 24px;">EXAMINATION ${reason}</strong><br><br>
+        CANDIDATE: <strong>${name.toUpperCase()}</strong><br>
+        DEADLINE WAS: <strong>${deadlineInfo.deadline_24h}</strong><br><br>
+        <span style="color: #856404;">SUBMIT YOUR ANSWER SHEET TO THE SUPERVISOR IMMEDIATELY</span>`;
+    msg.classList.add("show");
+}
+
+function exitFullScreen() {
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    else if (document.msExitFullscreen) document.msExitFullscreen();
+}
+
+// Detect when fullscreen is exited
+document.addEventListener("fullscreenchange", handleFullscreenChange);
+document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+document.addEventListener("msfullscreenchange", handleFullscreenChange);
+
+// Detect ESC or F11 key presses
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" || e.key === "F11") {
+        setTimeout(() => {
+            if (!document.fullscreenElement && 
+                !document.mozFullScreenElement && 
+                !document.webkitFullscreenElement && 
+                !document.msFullscreenElement) {
+                showFullscreenOverlay();
+            }
+        }, 100);
+    }
+});
+
+function handleFullscreenChange() {
+    const isFullscreen = document.fullscreenElement || 
+                       document.mozFullScreenElement || 
+                       document.webkitFullscreenElement || 
+                       document.msFullscreenElement;
+    
+    if (!isFullscreen && document.getElementById("examArea").style.display !== "none") {
+        showFullscreenOverlay();
+    } else {
+        hideFullscreenOverlay();
+    }
+}
+
+function showFullscreenOverlay() {
+    document.getElementById("fullscreenOverlay").style.display = "flex";
+}
+
+function hideFullscreenOverlay() {
+    document.getElementById("fullscreenOverlay").style.display = "none";
+}
+
+function reEnterFullscreen() {
+    if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().then(() => {
             hideFullscreenOverlay();
+        }).catch(() => {
+            alert("Fullscreen request failed. Please try again.");
+        });
+    } else if (document.documentElement.mozRequestFullScreen) {
+        document.documentElement.mozRequestFullScreen();
+    } else if (document.documentElement.webkitRequestFullscreen) {
+        document.documentElement.webkitRequestFullscreen();
+    } else if (document.documentElement.msRequestFullscreen) {
+        document.documentElement.msRequestFullscreen();
+    }
+}
+
+// Prevent common keyboard shortcuts that could exit exam
+document.addEventListener("keydown", (e) => {
+    // Prevent Alt+Tab, Ctrl+Alt+Del, etc.
+    if (e.altKey || e.ctrlKey) {
+        e.preventDefault();
+        return false;
+    }
+    
+    // Prevent F-keys that might cause issues
+    if (e.key.startsWith('F') && e.key !== 'F11') {
+        e.preventDefault();
+        return false;
+    }
+});
+
+// Utility functions for monitoring
+function getCurrentTimeStatus() {
+    return getDeadlineInfo();
+}
+
+function getRemainingTimeText() {
+    const info = getDeadlineInfo();
+    return `Time until deadline (${info.deadline_24h}): ${info.time_remaining.formatted}`;
+}
+
+// Console commands for testing/monitoring
+window.examTimer = {
+    getStatus: getCurrentTimeStatus,
+    getRemaining: getRemainingTimeText,
+    getDeadline: () => `${String(DEADLINE_HOUR).padStart(2, '0')}:${String(DEADLINE_MINUTE).padStart(2, '0')}`,
+    setDeadline: (hour, minute) => {
+        if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) {
+            DEADLINE_HOUR = hour;
+            DEADLINE_MINUTE = minute;
+            console.log(`Deadline updated to ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`);
+        } else {
+            console.error('Invalid time format. Use 24-hour format: hour (0-23), minute (0-59)');
         }
     }
-
-    function showFullscreenOverlay() {
-        document.getElementById("fullscreenOverlay").style.display = "flex";
-    }
-
-    function hideFullscreenOverlay() {
-        document.getElementById("fullscreenOverlay").style.display = "none";
-    }
-
-    function reEnterFullscreen() {
-        if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().then(() => {
-                hideFullscreenOverlay();
-            }).catch(() => {
-                alert("Fullscreen request failed. Please try again.");
-            });
-        } else if (document.documentElement.mozRequestFullScreen) {
-            document.documentElement.mozRequestFullScreen();
-        } else if (document.documentElement.webkitRequestFullscreen) {
-            document.documentElement.webkitRequestFullscreen();
-        } else if (document.documentElement.msRequestFullscreen) {
-            document.documentElement.msRequestFullscreen();
-        }
-    }
-
-    // Prevent common keyboard shortcuts that could exit exam
-    document.addEventListener("keydown", (e) => {
-        // Prevent Alt+Tab, Ctrl+Alt+Del, etc.
-        if (e.altKey || e.ctrlKey) {
-            e.preventDefault();
-            return false;
-        }
-        
-        // Prevent F-keys that might cause issues
-        if (e.key.startsWith('F') && e.key !== 'F11') {
-            e.preventDefault();
-            return false;
-        }
-    });
+};
 </script>
 
 </body>
 </html>
+
