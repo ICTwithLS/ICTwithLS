@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>ICTwithLS Examination Management System</title>
-<link rel="icon" type="image/X-icon" href="Photos/short_text_logo.jpg">
+<link rel="icon" type="image/x-icon" href="Photos/short_text_logo.jpg">
 <style>
     * {
         box-sizing: border-box;
@@ -90,6 +90,7 @@
         color: #212529;
         font-family: 'Courier New', monospace;
         font-weight: normal;
+        text-transform: uppercase;
     }
     
     input[type="text"]:focus, input[type="password"]:focus {
@@ -289,6 +290,90 @@
         background: #d4edda;
     }
     
+    /* Fullscreen Overlay */
+    #fullscreenOverlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255,255,255,0.98);
+        z-index: 1000;
+        flex-direction: column;
+    }
+
+    .overlay-header {
+        background: #343a40;
+        color: white;
+        padding: 15px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: normal;
+        font-size: 13px;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .overlay-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 50px 40px;
+        font-family: Arial, sans-serif;
+    }
+
+    .overlay-content h2 {
+        color: #dc3545;
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .overlay-content p {
+        color: #333;
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+
+    .overlay-content button {
+        background: #28a745;
+        color: white;
+        padding: 12px 25px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        border-radius: 5px;
+        width: auto;
+    }
+
+    .overlay-content button:hover {
+        background: #218838;
+    }
+
+    /* Security notices */
+    .security-notice {
+        background: #dc3545;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        font-size: 11px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Disable text selection in exam mode */
+    .exam-area * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
     /* Universal device compatibility */
     
     /* Mobile devices (320px to 768px) */
@@ -326,7 +411,7 @@
             border-radius: 0;
         }
         
-        .info-bar {
+        .info-bar, .overlay-header {
             flex-direction: column;
             gap: 8px;
             text-align: center;
@@ -376,6 +461,18 @@
         .exam-icon {
             font-size: 36px;
         }
+
+        .overlay-content {
+            padding: 30px 20px;
+        }
+
+        .overlay-content h2 {
+            font-size: 24px;
+        }
+
+        .overlay-content p {
+            font-size: 14px;
+        }
     }
     
     /* Small mobile devices (up to 480px) */
@@ -385,7 +482,7 @@
             padding: 15px 10px;
         }
         
-        .info-bar {
+        .info-bar, .overlay-header {
             padding: 10px;
         }
         
@@ -417,7 +514,7 @@
             padding: 30px 25px;
         }
         
-        .info-bar {
+        .info-bar, .overlay-header {
             flex-direction: row;
             justify-content: space-between;
         }
@@ -562,26 +659,6 @@
             color: black !important;
         }
     }
-    
-    /* Security notices */
-    .security-notice {
-        background: #dc3545;
-        color: white;
-        padding: 10px;
-        text-align: center;
-        font-size: 11px;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    /* Disable text selection in exam mode */
-    .exam-area * {
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
 </style>
 </head>
 <body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
@@ -596,7 +673,7 @@
         ⚠ THIS IS A SECURE EXAMINATION ENVIRONMENT ⚠
     </div>
     <br>
-    <center><img src="Photos/Long_text_logo.jpg" alt="logo" width="250px"></img></center>
+    <center><img src="Photos/Long_text_logo.jpg" alt="logo" width="250" /></center>
     <br>
     <h2>Student Authentication</h2>
     
@@ -626,7 +703,7 @@
     </div>
 
     <div class="form-group">
-        <label for="examPassword">Examination Access Code (This exam is locked. Your invigilator will provide the start password at 7pm).</label>
+        <label for="examPassword">Examination Access Code (This exam is locked. Your invigilator will provide the start password).</label>
         <input type="password" id="examPassword" placeholder="ENTER 6-DIGIT CODE" maxlength="6" required>
     </div>
 
@@ -637,7 +714,7 @@
     <div class="security-notice">
         🔒 EXAMINATION IN PROGRESS - SESSION MONITORED 🔒
     </div>
-    <div class="info-bar">
+    <div class="info-bar" id="infoBar">
         <div class="student-info">
             <span class="status-indicator"></span>
             <span class="student-label">CANDIDATE:</span>
@@ -648,6 +725,31 @@
             <span id="timerDisplay" class="timer-display"></span>
         </div>
     </div>
+    
+    <!-- Fullscreen overlay with timer and student info -->
+    <div id="fullscreenOverlay">
+        <div class="security-notice">
+            🔒 EXAMINATION IN PROGRESS - SESSION MONITORED 🔒
+        </div>
+        <div class="overlay-header">
+            <div class="student-info">
+                <span class="status-indicator"></span>
+                <span class="student-label">CANDIDATE:</span>
+                <span id="overlayStudentInfo"></span>
+            </div>
+            <div>
+                <span style="margin-right: 15px; font-weight: bold;">TIME REMAINING:</span>
+                <span id="overlayTimerDisplay" class="timer-display"></span>
+            </div>
+        </div>
+        <div class="overlay-content">
+            <h2>⚠ Fullscreen Mode Required</h2>
+            <p>Please re-enter fullscreen to continue your examination.</p>
+            <p>Your timer is still running and your progress is being monitored.</p>
+            <button onclick="reEnterFullscreen()">Re-Enter Fullscreen</button>
+        </div>
+    </div>
+
     <iframe id="examPaper" src="" sandbox="allow-scripts allow-same-origin"></iframe>
 </div>
 
@@ -662,39 +764,46 @@
 
 <script>
     let countdownInterval;
-    let examDuration = 3 * 3600; // 3 hours default
-    const correctPassword = "123456"; // <-- Change your password here
-    
-    // Hard cutoff time (24-hour format)
-    const END_HOUR = 22; // 10 PM
+    let examDuration = 3 * 3600; // 3 hours
+    const correctPassword = "123456";  // Change Password
+    const END_HOUR = 22; // Paper ending time
     const END_MINUTE = 0;
-    
+    let examData = {};
+
+    // Auto-capitalize input text
+    document.addEventListener('DOMContentLoaded', function() {
+        const textInputs = document.querySelectorAll('input[type="text"]');
+        textInputs.forEach(input => {
+            input.addEventListener('input', function(e) {
+                const cursorPosition = e.target.selectionStart;
+                e.target.value = e.target.value.toUpperCase();
+                e.target.setSelectionRange(cursorPosition, cursorPosition);
+            });
+        });
+    });
+
     function startExam() {
         const name = document.getElementById("studentName").value.trim();
         const studentId = document.getElementById("studentId").value.trim();
         const password = document.getElementById("examPassword").value.trim();
         const button = document.querySelector('button');
-    
-        // Reset validation styles
-        document.querySelectorAll('input').forEach(input => {
-            input.classList.remove('invalid', 'valid');
-        });
-    
+
+        document.querySelectorAll('input').forEach(input => input.classList.remove('invalid', 'valid'));
+
         if (!name || !studentId || !password) {
             if (!name) document.getElementById("studentName").classList.add('invalid');
             if (!studentId) document.getElementById("studentId").classList.add('invalid');
             if (!password) document.getElementById("examPassword").classList.add('invalid');
-            
             alert("ERROR: ALL FIELDS ARE MANDATORY");
             return;
         }
-    
+
         document.getElementById("studentName").classList.add('valid');
         document.getElementById("studentId").classList.add('valid');
-        
+
         button.classList.add('loading');
         button.textContent = 'AUTHENTICATING...';
-    
+
         setTimeout(() => {
             if (password !== correctPassword) {
                 document.getElementById("examPassword").classList.add('invalid');
@@ -707,62 +816,77 @@
                 }, 3000);
                 return;
             }
-    
+
             document.getElementById("examPassword").classList.add('valid');
             button.classList.remove('loading');
             button.classList.add('success');
             button.textContent = 'ACCESS GRANTED - LOADING...';
-    
+
             setTimeout(() => {
                 document.getElementById("setup").style.display = "none";
                 document.getElementById("examArea").style.display = "flex";
-                document.getElementById("studentInfo").textContent = `${name.toUpperCase()} (ID: ${studentId})`;
-    
+                
+                const studentInfoText = `${name.toUpperCase()} (ID: ${studentId})`;
+                document.getElementById("studentInfo").textContent = studentInfoText;
+                document.getElementById("overlayStudentInfo").textContent = studentInfoText;
+
                 const iframe = document.getElementById("examPaper");
                 iframe.src = "https://drive.google.com/file/d/1pMJqV_d8kQJYf-5bP-geL-XmfguNkOQq/preview";
-    
+
                 if (document.documentElement.requestFullscreen) {
                     document.documentElement.requestFullscreen();
                 }
-    
-                let timeLeft = examDuration;
-                updateTimerDisplay(timeLeft);
-    
-                countdownInterval = setInterval(() => {
-                    timeLeft--;
-                    updateTimerDisplay(timeLeft);
-    
-                    if (timeLeft <= 600 && timeLeft > 0) { 
-                        document.getElementById("timerDisplay").classList.add("timer-warning");
-                    }
-    
-                    // Stop when countdown finishes
-                    if (timeLeft <= 0) {
-                        endExam(name);
-                    }
-    
-                    // Hard cutoff: stop at 10:00 PM
-                    const now = new Date();
-                    if (now.getHours() > END_HOUR || 
-                       (now.getHours() === END_HOUR && now.getMinutes() >= END_MINUTE)) {
-                        endExam(name);
-                    }
-    
-                }, 1000);
+
+                // Store exam data
+                const endTime = Date.now() + examDuration * 1000;
+                examData = {
+                    endTime: endTime,
+                    studentName: name,
+                    studentId: studentId
+                };
+
+                startCountdown(endTime);
             }, 2000);
         }, 1500);
     }
-    
-    function updateTimerDisplay(seconds) {
-        let h = String(Math.floor(seconds / 3600)).padStart(2,'0');
-        let m = String(Math.floor((seconds % 3600) / 60)).padStart(2,'0');
-        let s = String(seconds % 60).padStart(2,'0');
-        document.getElementById("timerDisplay").textContent = `${h}:${m}:${s}`;
+
+    function startCountdown(endTime) {
+        updateTimerDisplay(Math.floor((endTime - Date.now()) / 1000));
+        countdownInterval = setInterval(() => {
+            const remaining = Math.floor((endTime - Date.now()) / 1000);
+            updateTimerDisplay(remaining);
+
+            if (remaining <= 600 && remaining > 0) {
+                document.getElementById("timerDisplay").classList.add("timer-warning");
+                document.getElementById("overlayTimerDisplay").classList.add("timer-warning");
+            }
+            if (remaining <= 0) {
+                endExam(examData.studentName || "UNKNOWN");
+            }
+
+            const now = new Date();
+            if (now.getHours() > END_HOUR || 
+                (now.getHours() === END_HOUR && now.getMinutes() >= END_MINUTE)) {
+                endExam(examData.studentName || "UNKNOWN");
+            }
+        }, 1000);
     }
-    
+
+    function updateTimerDisplay(seconds) {
+        const h = String(Math.floor(seconds / 3600)).padStart(2,'0');
+        const m = String(Math.floor((seconds % 3600) / 60)).padStart(2,'0');
+        const s = String(seconds % 60).padStart(2,'0');
+        const timeString = `${h}:${m}:${s}`;
+        
+        document.getElementById("timerDisplay").textContent = timeString;
+        document.getElementById("overlayTimerDisplay").textContent = timeString;
+    }
+
     function endExam(name) {
         clearInterval(countdownInterval);
         exitFullScreen();
+        examData = {};
+
         document.getElementById("examArea").style.display = "none";
         const msg = document.getElementById("finalMessage");
         msg.querySelector("#finalMessageText").innerHTML =
@@ -771,54 +895,86 @@
             <span style="color: #856404;">SUBMIT YOUR ANSWER SHEET TO THE SUPERVISOR IMMEDIATELY</span>`;
         msg.classList.add("show");
     }
-    
+
     function exitFullScreen() {
         if (document.exitFullscreen) document.exitFullscreen();
         else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
         else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
         else if (document.msExitFullscreen) document.msExitFullscreen();
     }
-    
-    // Security shortcuts
-    document.addEventListener('keydown', function(e) {
-        if (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'a' || e.key === 's' || e.key === 'p')) {
+
+    // Detect when fullscreen is exited
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("msfullscreenchange", handleFullscreenChange);
+
+    // Detect ESC or F11 key presses
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" || e.key === "F11") {
+            setTimeout(() => {
+                if (!document.fullscreenElement && 
+                    !document.mozFullScreenElement && 
+                    !document.webkitFullscreenElement && 
+                    !document.msFullscreenElement) {
+                    showFullscreenOverlay();
+                }
+            }, 100);
+        }
+    });
+
+    function handleFullscreenChange() {
+        const isFullscreen = document.fullscreenElement || 
+                           document.mozFullScreenElement || 
+                           document.webkitFullscreenElement || 
+                           document.msFullscreenElement;
+        
+        if (!isFullscreen && document.getElementById("examArea").style.display !== "none") {
+            showFullscreenOverlay();
+        } else {
+            hideFullscreenOverlay();
+        }
+    }
+
+    function showFullscreenOverlay() {
+        document.getElementById("fullscreenOverlay").style.display = "flex";
+    }
+
+    function hideFullscreenOverlay() {
+        document.getElementById("fullscreenOverlay").style.display = "none";
+    }
+
+    function reEnterFullscreen() {
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen().then(() => {
+                hideFullscreenOverlay();
+            }).catch(() => {
+                alert("Fullscreen request failed. Please try again.");
+            });
+        } else if (document.documentElement.mozRequestFullScreen) {
+            document.documentElement.mozRequestFullScreen();
+        } else if (document.documentElement.webkitRequestFullscreen) {
+            document.documentElement.webkitRequestFullscreen();
+        } else if (document.documentElement.msRequestFullscreen) {
+            document.documentElement.msRequestFullscreen();
+        }
+    }
+
+    // Prevent common keyboard shortcuts that could exit exam
+    document.addEventListener("keydown", (e) => {
+        // Prevent Alt+Tab, Ctrl+Alt+Del, etc.
+        if (e.altKey || e.ctrlKey) {
             e.preventDefault();
             return false;
         }
-        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+        
+        // Prevent F-keys that might cause issues
+        if (e.key.startsWith('F') && e.key !== 'F11') {
             e.preventDefault();
             return false;
         }
-        if (e.altKey && e.key === 'Tab') {
-            e.preventDefault();
-            return false;
-        }
-        if (e.key === 'Enter' && document.getElementById('setup').style.display !== 'none') {
-            e.preventDefault();
-            startExam();
-        }
     });
-    
-    document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('input', function() {
-            this.classList.remove('invalid', 'valid');
-            this.value = this.value.toUpperCase();
-        });
-    });
-    
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.addEventListener('selectstart', e => {
-        if (document.getElementById('examArea').style.display !== 'none') {
-            e.preventDefault();
-        }
-    });
-    
-    window.addEventListener('blur', function() {
-        if (document.getElementById('examArea').style.display !== 'none') {
-            alert('WARNING: WINDOW FOCUS LOST - EXAMINATION ACTIVITY LOGGED');
-        }
-    });
-    </script>
+</script>
 
 </body>
 </html>
