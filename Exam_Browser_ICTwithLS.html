@@ -767,15 +767,17 @@
 
 
 
-   
-    let countdownInterval;
+
+
+
+let countdownInterval;
 let examDuration = 3 * 3600; // 3 hours in seconds (backup duration)
-const correctPassword = "174368";
+const correctPassword = "123456";
 
 // Deadline configuration - Set your specific deadline time here
 const DEADLINE_HOUR = 22;    // 24-hour format (0-23)
-const DEADLINE_MINUTE = 15;   // Minutes (0-59)
-const DEADLINE_DATE = null;  // Set specific date or null for today/tomorrow
+const DEADLINE_MINUTE = 0;   // Minutes (0-59)
+const DEADLINE_DATE = "2025-08-13";  // Set specific date or null for today/tomorrow
 
 let examData = {};
 
@@ -783,7 +785,6 @@ let examData = {};
 
 
 
-   
 // Auto-capitalize input text
 document.addEventListener('DOMContentLoaded', function() {
     const textInputs = document.querySelectorAll('input[type="text"]');
@@ -911,11 +912,10 @@ function startExam() {
         // Check if deadline has already passed
         const timeInfo = getTimeUntilDeadline();
         if (timeInfo.deadline_passed) {
-            alert(`EXAMINATION DEADLINE HAS PASSED!\nDeadline was: ${String(DEADLINE_HOUR).padStart(2, '0')}:${String(DEADLINE_MINUTE).padStart(2, '0')}`);
-            button.classList.remove('success');
-            button.classList.add('error');
-            button.textContent = 'DEADLINE PASSED';
-            return;
+            // End exam if time expired
+            if (timeInfo.is_expired || timeInfo.total_seconds <= 0) {
+                endExam(examData.studentName || name.toUpperCase(), "DEADLINE REACHED");
+            }
         }
 
         setTimeout(() => {
@@ -971,7 +971,7 @@ function startCountdown() {
         
         // End exam if time expired
         if (timeInfo.is_expired || timeInfo.total_seconds <= 0) {
-            endExam(examData.studentName || "UNKNOWN", "DEADLINE REACHED");
+            endExam(examData.studentName || $[name], "DEADLINE REACHED");
         }
     };
     
@@ -1004,7 +1004,8 @@ function endExam(name, reason = "TIME EXPIRED") {
     msg.querySelector("#finalMessageText").innerHTML =
         `<strong style="color: #dc3545; font-size: 24px;">EXAMINATION ${reason}</strong><br><br>
         CANDIDATE: <strong>${name.toUpperCase()}</strong><br>
-        DEADLINE WAS: <strong>${deadlineInfo.deadline_24h}</strong><br><br>
+        DEADLINE TIME WAS: <strong>${deadlineInfo.deadline_24h}</strong><br><br>
+        DEADLINE DATE WAS: <strong>${DEADLINE_DATE}</strong><br><br>
         <span style="color: #856404;">SUBMIT YOUR ANSWER SHEET TO THE SUPERVISOR IMMEDIATELY</span>`;
     msg.classList.add("show");
 }
@@ -1115,6 +1116,8 @@ window.examTimer = {
 };
 </script>
 
+
 </body>
 </html>
+
 
