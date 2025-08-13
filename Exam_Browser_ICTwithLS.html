@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ICTwithLS Examination Management System</title>
+<link rel="icon" type="image/X-icon" href="Photos/short_text_logo.jpg">
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        font-family: 'Arial', 'Helvetica', sans-serif;
+        background: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        line-height: 1.5;
+        color: #212529;
+        min-height: 100vh;
+        font-size: 14px;
+    }
+    
+    header {
+        background: #1a1a1a;
+        color: white;
+        padding: 20px 30px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: normal;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        border-bottom: 3px solid #dc3545;
+    }
+    
+    .header-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #ffffff;
+    }
+    
+    .header-subtitle {
+        font-size: 12px;
+        color: #cccccc;
+        font-weight: normal;
+    }
+    
+    .container {
+        background: white;
+        max-width: 450px;
+        margin: 50px auto;
+        padding: 40px;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .container h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #212529;
+        font-weight: bold;
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 2px solid #dc3545;
+        padding-bottom: 10px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+        color: #495057;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #ced4da;
+        font-size: 14px;
+        background: #ffffff;
+        color: #212529;
+        font-family: 'Courier New', monospace;
+        font-weight: normal;
+    }
+    
+    input[type="text"]:focus, input[type="password"]:focus {
+        outline: none;
+        border-color: #dc3545;
+        background: #fff;
+    }
+    
+    button {
+        width: 100%;
+        background: #dc3545;
+        color: white;
+        padding: 15px;
+        border: none;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 25px;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-family: Arial, sans-serif;
+    }
+    
+    button:hover {
+        background: #c82333;
+    }
+    
+    button:active {
+        background: #bd2130;
+    }
+    
+    .exam-area {
+        display: none;
+        height: 100vh;
+        background: #ffffff;
+        flex-direction: column;
+    }
+    
+    .info-bar {
+        background: #343a40;
+        color: white;
+        padding: 15px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: normal;
+        font-size: 13px;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .student-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .student-label {
+        font-weight: bold;
+        color: #ffffff;
+    }
+    
+    .timer-display {
+        font-family: 'Courier New', monospace;
+        font-size: 16px;
+        font-weight: bold;
+        background: #ffffff;
+        color: #212529;
+        padding: 8px 15px;
+        border: 2px solid #28a745;
+        min-width: 110px;
+        text-align: center;
+    }
+    
+    .timer-warning {
+        color: #ffffff !important;
+        background: #dc3545 !important;
+        border-color: #dc3545 !important;
+        animation: flash 1s infinite;
+    }
+    
+    @keyframes flash {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+    
+    iframe {
+        flex: 1;
+        border: none;
+        background: white;
+    }
+    
+    .final-message {
+        display: none;
+        text-align: center;
+        font-size: 18px;
+        padding: 60px 40px;
+        background: #f8f9fa;
+        color: #212529;
+        height: 100vh;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-weight: normal;
+        line-height: 1.6;
+        border: 3px solid #dc3545;
+    }
+    
+    .final-message.show {
+        display: flex;
+    }
+    
+    .exam-icon {
+        font-size: 48px;
+        margin-bottom: 20px;
+        color: #dc3545;
+    }
+    
+    .status-indicator {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #28a745;
+        border-radius: 50%;
+        margin-right: 10px;
+        animation: blink 2s infinite;
+    }
+    
+    @keyframes blink {
+        0%, 50% { opacity: 1; }
+        51%, 100% { opacity: 0.3; }
+    }
+    
+    .warning-text {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        color: #856404;
+        padding: 15px;
+        margin-bottom: 20px;
+        font-size: 12px;
+        text-align: center;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    .instructions {
+        background: #e9ecef;
+        border-left: 4px solid #dc3545;
+        padding: 15px;
+        margin-bottom: 25px;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+    
+    .instructions h3 {
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        color: #dc3545;
+    }
+    
+    .instructions ul {
+        margin-left: 15px;
+        margin-top: 8px;
+    }
+    
+    .instructions li {
+        margin-bottom: 3px;
+    }
+    
+    /* Error states */
+    .error {
+        background: #721c24 !important;
+        border-color: #721c24 !important;
+    }
+    
+    .success {
+        background: #155724 !important;
+        border-color: #155724 !important;
+    }
+    
+    .loading {
+        background: #495057 !important;
+        opacity: 0.8;
+        pointer-events: none;
+    }
+    
+    /* Validation styles */
+    input.invalid {
+        border-color: #dc3545;
+        background: #f8d7da;
+    }
+    
+    input.valid {
+        border-color: #28a745;
+        background: #d4edda;
+    }
+    
+    /* Universal device compatibility */
+    
+    /* Mobile devices (320px to 768px) */
+    @media (max-width: 768px) {
+        body {
+            font-size: 13px;
+        }
+        
+        .container {
+            margin: 10px;
+            padding: 20px 15px;
+            max-width: none;
+        }
+        
+        .container h2 {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        input[type="text"], input[type="password"] {
+            padding: 14px 12px;
+            font-size: 16px; /* Prevents zoom on iOS */
+            -webkit-appearance: none;
+            border-radius: 0;
+        }
+        
+        button {
+            padding: 16px;
+            font-size: 14px;
+            -webkit-appearance: none;
+            border-radius: 0;
+        }
+        
+        .info-bar {
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+            padding: 12px;
+            font-size: 12px;
+        }
+        
+        .timer-display {
+            font-size: 16px;
+            min-width: 120px;
+            padding: 10px 15px;
+        }
+        
+        header {
+            font-size: 11px;
+            padding: 12px 15px;
+        }
+        
+        .header-title {
+            font-size: 13px;
+        }
+        
+        .header-subtitle {
+            font-size: 10px;
+        }
+        
+        .instructions {
+            padding: 12px;
+            font-size: 11px;
+        }
+        
+        .warning-text {
+            padding: 12px;
+            font-size: 11px;
+        }
+        
+        .security-notice {
+            padding: 8px;
+            font-size: 10px;
+        }
+        
+        .final-message {
+            font-size: 16px;
+            padding: 40px 20px;
+        }
+        
+        .exam-icon {
+            font-size: 36px;
+        }
+    }
+    
+    /* Small mobile devices (up to 480px) */
+    @media (max-width: 480px) {
+        .container {
+            margin: 5px;
+            padding: 15px 10px;
+        }
+        
+        .info-bar {
+            padding: 10px;
+        }
+        
+        .timer-display {
+            font-size: 14px;
+            min-width: 100px;
+            padding: 8px 12px;
+        }
+        
+        header {
+            padding: 10px;
+        }
+        
+        .header-title {
+            font-size: 12px;
+        }
+        
+        .final-message {
+            font-size: 14px;
+            padding: 30px 15px;
+        }
+    }
+    
+    /* Large mobile and small tablets (481px to 768px) */
+    @media (min-width: 481px) and (max-width: 768px) {
+        .container {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 30px 25px;
+        }
+        
+        .info-bar {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        
+        .timer-display {
+            font-size: 15px;
+            min-width: 110px;
+        }
+    }
+    
+    /* Tablets (769px to 1024px) */
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .container {
+            max-width: 550px;
+            margin: 40px auto;
+            padding: 35px 30px;
+        }
+        
+        body {
+            font-size: 14px;
+        }
+        
+        .container h2 {
+            font-size: 18px;
+        }
+        
+        input[type="text"], input[type="password"] {
+            padding: 13px 15px;
+            font-size: 14px;
+        }
+        
+        .timer-display {
+            font-size: 16px;
+        }
+    }
+    
+    /* Large tablets and small laptops (1025px to 1366px) */
+    @media (min-width: 1025px) and (max-width: 1366px) {
+        .container {
+            max-width: 500px;
+        }
+        
+        body {
+            font-size: 14px;
+        }
+    }
+    
+    /* Desktop and large screens (1367px+) */
+    @media (min-width: 1367px) {
+        .container {
+            max-width: 520px;
+        }
+        
+        body {
+            font-size: 15px;
+        }
+        
+        .container h2 {
+            font-size: 19px;
+        }
+    }
+    
+    /* Landscape orientation adjustments */
+    @media (orientation: landscape) and (max-height: 600px) {
+        .container {
+            margin: 10px auto;
+            padding: 20px;
+        }
+        
+        .container h2 {
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .instructions {
+            padding: 10px;
+            font-size: 11px;
+        }
+        
+        .warning-text {
+            padding: 10px;
+        }
+    }
+    
+    /* High DPI displays */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+        input[type="text"], input[type="password"] {
+            border-width: 1px; /* Prevent thick borders on retina */
+        }
+        
+        .timer-display {
+            border-width: 1px;
+        }
+    }
+    
+    /* Android specific fixes */
+    @supports (-webkit-touch-callout: none) {
+        input[type="text"], input[type="password"] {
+            -webkit-appearance: none;
+            -webkit-border-radius: 0;
+        }
+        
+        button {
+            -webkit-appearance: none;
+            -webkit-border-radius: 0;
+        }
+    }
+    
+    /* iOS specific fixes */
+    @supports (-webkit-overflow-scrolling: touch) {
+        input[type="text"], input[type="password"] {
+            -webkit-appearance: none;
+            border-radius: 0;
+            background-clip: padding-box;
+        }
+        
+        button {
+            -webkit-appearance: none;
+            border-radius: 0;
+        }
+        
+        body {
+            -webkit-text-size-adjust: 100%;
+        }
+    }
+    
+    /* Print styles */
+    @media print {
+        .info-bar, header, .instructions, .warning-text {
+            display: none !important;
+        }
+        
+        .exam-area {
+            height: auto !important;
+        }
+        
+        * {
+            background: white !important;
+            color: black !important;
+        }
+    }
+    
+    /* Security notices */
+    .security-notice {
+        background: #dc3545;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        font-size: 11px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Disable text selection in exam mode */
+    .exam-area * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+</style>
+</head>
+<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+
+<header>
+    <div class="header-title">EXAMINATION MANAGEMENT SYSTEM</div>
+    <div class="header-subtitle">Paper: First Final Exam in ICT | Paper No: Paper 05 | Duration: 3 Hours</div>
+</header>
+
+<div class="container" id="setup">
+    <div class="security-notice">
+        ⚠ THIS IS A SECURE EXAMINATION ENVIRONMENT ⚠
+    </div>
+    <br>
+    <center><img src="Photos/Long_text_logo.jpg" alt="logo" width="250px"></img></center>
+    <br>
+    <h2>Student Authentication</h2>
+    
+    <div class="warning-text">
+        ⚠ WARNING: This is a monitored examination session
+    </div>
+    
+    <div class="instructions">
+        <h3>Instructions:</h3>
+        <ul>
+            <li>No books or notes can refer during the exam.</li>
+            <li>Ensure stable internet connection</li>
+            <li>Close all other applications</li>
+            <li>Do not refresh or navigate away</li>
+            <li>Contact supervisor for technical issues</li>
+        </ul>
+    </div>
+    
+    <div class="form-group">
+        <label for="studentName">Student Name</label>
+        <input type="text" id="studentName" placeholder="ENTER FULL NAME AS PER RECORDS" required>
+    </div>
+
+    <div class="form-group">
+        <label for="studentId">Student ID Number (Start with "OLT" or "OLR")</label>
+        <input type="text" id="studentId" placeholder="ENTER STUDENT ID" required>
+    </div>
+
+    <div class="form-group">
+        <label for="examPassword">Examination Access Code (This exam is locked. Your invigilator will provide the start password at 7pm).</label>
+        <input type="password" id="examPassword" placeholder="ENTER 6-DIGIT CODE" maxlength="6" required>
+    </div>
+
+    <button onclick="startExam()">START THE EXAMINATION</button>
+</div>
+
+<div class="exam-area" id="examArea">
+    <div class="security-notice">
+        🔒 EXAMINATION IN PROGRESS - SESSION MONITORED 🔒
+    </div>
+    <div class="info-bar">
+        <div class="student-info">
+            <span class="status-indicator"></span>
+            <span class="student-label">CANDIDATE:</span>
+            <span id="studentInfo"></span>
+        </div>
+        <div>
+            <span style="margin-right: 15px; font-weight: bold;">TIME REMAINING:</span>
+            <span id="timerDisplay" class="timer-display"></span>
+        </div>
+    </div>
+    <iframe id="examPaper" src="" sandbox="allow-scripts allow-same-origin"></iframe>
+</div>
+
+<div class="final-message" id="finalMessage">
+    <div class="exam-icon">⏰</div>
+    <div id="finalMessageText"></div>
+    <div style="margin-top: 30px; font-size: 14px; color: #6c757d;">
+        EXAMINATION SESSION TERMINATED<br>
+        PLEASE REMAIN SEATED UNTIL DISMISSED
+    </div>
+</div>
+
+<script>
+    let countdownInterval;
+    let examDuration = 3 * 3600; // 3 hours default
+    const correctPassword = "123456"; // <-- Change your password here
+    
+    // Hard cutoff time (24-hour format)
+    const END_HOUR = 22; // 10 PM
+    const END_MINUTE = 0;
+    
+    function startExam() {
+        const name = document.getElementById("studentName").value.trim();
+        const studentId = document.getElementById("studentId").value.trim();
+        const password = document.getElementById("examPassword").value.trim();
+        const button = document.querySelector('button');
+    
+        // Reset validation styles
+        document.querySelectorAll('input').forEach(input => {
+            input.classList.remove('invalid', 'valid');
+        });
+    
+        if (!name || !studentId || !password) {
+            if (!name) document.getElementById("studentName").classList.add('invalid');
+            if (!studentId) document.getElementById("studentId").classList.add('invalid');
+            if (!password) document.getElementById("examPassword").classList.add('invalid');
+            
+            alert("ERROR: ALL FIELDS ARE MANDATORY");
+            return;
+        }
+    
+        document.getElementById("studentName").classList.add('valid');
+        document.getElementById("studentId").classList.add('valid');
+        
+        button.classList.add('loading');
+        button.textContent = 'AUTHENTICATING...';
+    
+        setTimeout(() => {
+            if (password !== correctPassword) {
+                document.getElementById("examPassword").classList.add('invalid');
+                button.classList.remove('loading');
+                button.classList.add('error');
+                button.textContent = 'AUTHENTICATION FAILED';
+                setTimeout(() => {
+                    button.classList.remove('error');
+                    button.textContent = 'START THE EXAMINATION';
+                }, 3000);
+                return;
+            }
+    
+            document.getElementById("examPassword").classList.add('valid');
+            button.classList.remove('loading');
+            button.classList.add('success');
+            button.textContent = 'ACCESS GRANTED - LOADING...';
+    
+            setTimeout(() => {
+                document.getElementById("setup").style.display = "none";
+                document.getElementById("examArea").style.display = "flex";
+                document.getElementById("studentInfo").textContent = `${name.toUpperCase()} (ID: ${studentId})`;
+    
+                const iframe = document.getElementById("examPaper");
+                iframe.src = "https://drive.google.com/file/d/1pMJqV_d8kQJYf-5bP-geL-XmfguNkOQq/preview";
+    
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                }
+    
+                let timeLeft = examDuration;
+                updateTimerDisplay(timeLeft);
+    
+                countdownInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimerDisplay(timeLeft);
+    
+                    if (timeLeft <= 600 && timeLeft > 0) { 
+                        document.getElementById("timerDisplay").classList.add("timer-warning");
+                    }
+    
+                    // Stop when countdown finishes
+                    if (timeLeft <= 0) {
+                        endExam(name);
+                    }
+    
+                    // Hard cutoff: stop at 10:00 PM
+                    const now = new Date();
+                    if (now.getHours() > END_HOUR || 
+                       (now.getHours() === END_HOUR && now.getMinutes() >= END_MINUTE)) {
+                        endExam(name);
+                    }
+    
+                }, 1000);
+            }, 2000);
+        }, 1500);
+    }
+    
+    function updateTimerDisplay(seconds) {
+        let h = String(Math.floor(seconds / 3600)).padStart(2,'0');
+        let m = String(Math.floor((seconds % 3600) / 60)).padStart(2,'0');
+        let s = String(seconds % 60).padStart(2,'0');
+        document.getElementById("timerDisplay").textContent = `${h}:${m}:${s}`;
+    }
+    
+    function endExam(name) {
+        clearInterval(countdownInterval);
+        exitFullScreen();
+        document.getElementById("examArea").style.display = "none";
+        const msg = document.getElementById("finalMessage");
+        msg.querySelector("#finalMessageText").innerHTML =
+            `<strong style="color: #dc3545; font-size: 24px;">EXAMINATION TIME EXPIRED</strong><br><br>
+            CANDIDATE: <strong>${name.toUpperCase()}</strong><br><br>
+            <span style="color: #856404;">SUBMIT YOUR ANSWER SHEET TO THE SUPERVISOR IMMEDIATELY</span>`;
+        msg.classList.add("show");
+    }
+    
+    function exitFullScreen() {
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        else if (document.msExitFullscreen) document.msExitFullscreen();
+    }
+    
+    // Security shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'a' || e.key === 's' || e.key === 'p')) {
+            e.preventDefault();
+            return false;
+        }
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+            e.preventDefault();
+            return false;
+        }
+        if (e.altKey && e.key === 'Tab') {
+            e.preventDefault();
+            return false;
+        }
+        if (e.key === 'Enter' && document.getElementById('setup').style.display !== 'none') {
+            e.preventDefault();
+            startExam();
+        }
+    });
+    
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', function() {
+            this.classList.remove('invalid', 'valid');
+            this.value = this.value.toUpperCase();
+        });
+    });
+    
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('selectstart', e => {
+        if (document.getElementById('examArea').style.display !== 'none') {
+            e.preventDefault();
+        }
+    });
+    
+    window.addEventListener('blur', function() {
+        if (document.getElementById('examArea').style.display !== 'none') {
+            alert('WARNING: WINDOW FOCUS LOST - EXAMINATION ACTIVITY LOGGED');
+        }
+    });
+    </script>
+
+</body>
+</html>
