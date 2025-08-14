@@ -779,6 +779,8 @@ const DEADLINE_HOUR = 20;    // 24-hour format (0-23)
 const DEADLINE_MINUTE = 20;   // Minutes (0-59)
 const DEADLINE_DATE = "2025-08-14";  // Set specific date or null for today/tomorrow
 
+const paperlink = "https://drive.google.com/file/d/1UAHOz0wWLHDWaollvaMIHGh8lQxY--aH/preview"; // Link to the exam paper
+
 let examData = {};
 
 
@@ -927,7 +929,7 @@ function startExam() {
             document.getElementById("overlayStudentInfo").textContent = studentInfoText;
 
             const iframe = document.getElementById("examPaper");
-            iframe.src = "https://drive.google.com/file/d/1pMJqV_d8kQJYf-5bP-geL-XmfguNkOQq/preview";
+            iframe.src = paperlink;
 
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
@@ -1119,6 +1121,7 @@ window.examTimer = {
 
 </body>
 </html>
+
 
 
 
