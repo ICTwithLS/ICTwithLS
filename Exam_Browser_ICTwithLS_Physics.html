@@ -762,6 +762,28 @@
     </div>
 </div>
 
+<!-- Popup Overlay -->
+<div id="popupOverlay" style="
+    display: none; 
+    position: fixed; 
+    top: 0; left: 0; 
+    width: 100%; height: 100%; 
+    background: rgba(0,0,0,0.7); 
+    z-index: 2000; 
+    justify-content: center; 
+    align-items: center;">
+    <div style="background: white; width: 80%; max-width: 800px; height: 80%; position: relative; border-radius: 8px; overflow: hidden;">
+        <iframe id="popupIframe" src="" style="width: 100%; height: 100%; border: none;"></iframe><br>
+        <button onclick="closePopup()" style="
+            position: absolute; top: 10px; right: 10px; 
+            background: #dc3545; color: white; border: none; 
+            padding: 8px 12px; cursor: pointer; font-weight: bold;">
+            ✖ Close
+        </button>
+    </div>
+</div>
+
+
 <script>
 
 
@@ -780,11 +802,14 @@ const DEADLINE_MINUTE = 50;   // Minutes (0-59)
 const DEADLINE_DATE = "2025-08-14";  // Set specific date or null for today/tomorrow
 
 const paperlink = "https://drive.google.com/file/d/1UAHOz0wWLHDWaollvaMIHGh8lQxY--aH/preview"; // Link to the exam paper
+const Submitanswers = "https://forms.gle/n2mMtfCx2SHgUu9H9"; // Link to submit answers (change to your form link)
 
 let examData = {};
 
 
 
+
+   
 
 
 // Auto-capitalize input text
@@ -1010,6 +1035,9 @@ function endExam(name, reason = "TIME EXPIRED") {
         DEADLINE DATE WAS: <strong>${DEADLINE_DATE}</strong><br><br>
         <span style="color: #856404;">SUBMIT YOUR ANSWER SHEET TO THE SUPERVISOR IMMEDIATELY</span>`;
     msg.classList.add("show");
+    // Show iframe popup when exam ends
+    showPopup(Submitanswers); // Change to your desired iframe URL
+
 }
 
 function exitFullScreen() {
@@ -1116,9 +1144,22 @@ window.examTimer = {
         }
     }
 };
+
+function showPopup(url) {
+    const popup = document.getElementById("popupOverlay");
+    const iframe = document.getElementById("popupIframe");
+    iframe.src = url;
+    popup.style.display = "flex"; // show overlay
+}
+
+function closePopup() {
+    const popup = document.getElementById("popupOverlay");
+    const iframe = document.getElementById("popupIframe");
+    iframe.src = ""; // clear iframe to stop loading
+    popup.style.display = "none"; // hide overlay
+}
+
 </script>
 
 </body>
-
 </html>
-
