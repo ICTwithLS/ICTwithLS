@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marks Calculator ||| ICTwithLS</title>
+<link rel="icon" type="image/X-icon" href="Photos/short_text_logo.jpg">
+<style>body {
+    font-family: "Hiruko Pro";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+input {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: calc(100% - 22px);
+    font-size:20px
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: "Hiruko Pro";
+    width:150px;
+    height:50px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+h2 {
+    margin-top: 20px;
+    color: #333;
+    font-size: 30PX;
+    font-family: "Hiruko Pro";
+    color:"red"
+}
+
+</Style>
+
+</head>
+<body bgcolor="Black">
+    <div class="container">
+        <img src="./Photos/Long_text_logo.jpg" width="250px" height="100px"></img>
+        <h1>Marks Calculator ||| ICTwithLS</h1>
+        <input type="number" id="num1" placeholder="Enter MCQ Marks">
+        <input type="number" id="num2" placeholder="Enter 2nd Paper Marks">
+        <button onclick="calculateSum()">Calculate Total</button>
+        <h2 id="result"></h2>
+    </div>
+
+    
+    <script>
+    function calculateSum() {
+    const num1 = parseFloat(document.getElementById('num1').value);
+    const num2 = parseFloat(document.getElementById('num2').value);
+   
+    if (isNaN(num1) || isNaN(num2)) {
+        document.getElementById('result').innerText = "Please enter valid numbers.";
+    } else {
+        const sum = num1 + num2;
+        document.getElementById('result').innerText = "Total Marks: " + sum + "%";
+    }
+}
+
+
+    </script>
+</body>
+</html>

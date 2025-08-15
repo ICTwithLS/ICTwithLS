@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Code Tester ||| ICTwithLS</title>
+<link rel="icon" type="image/X-icon" href="Photos/short text logo.jpg">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: black;
+            margin: 0;
+            padding: 0;
+        }
+        h3 {
+            color: yellow;
+            font-family: 'hiruko pro';
+        }
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1000px;
+        }
+        textarea {
+            width: 50%;
+            height: 600px;
+            margin-right: 10px;
+            padding: 10px;
+            font-family: hiruko pro;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            background-color: #fff;
+	    font-size: 20px;
+        }
+        iframe {
+            width: 50%;
+            height: 620px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+            font-family: 'hiruko pro'
+        }
+        button:hover {
+            background-color: yellow;
+	    color: red;
+        } 
+         
+    </style>
+</head>
+<body>
+
+<a href='https://ictwithls.w3spaces.com/'><img src="Photos/Long text logo.jpg" width="250px" height=100px></a>
+
+    <h3>Write Your HTML, CSS and JAVA test it free... </h3>
+    
+<button onclick="runCode()" class='btn'>Run Code</button>
+<br>
+<div class="container">
+        <textarea id="htmlCode" placeholder="Write your HTML, CSS, JAVA, code here..."></textarea>
+        <iframe id="output"></iframe>
+    </div>
+
+
+
+    
+<br><br>
+<small><div class="copyright"><center><br> <b><font color ='gray'>©2025 All Right Reserved. <br>Powered by <a href='https://lscomputertechnology.000webhostapp.com/'><font color='Yellow'>L.S.COMPUTER TECHNOLOGH</a>.</font></font></b></center></div></small>
+
+    <script>
+        function runCode() {
+            const code = document.getElementById('htmlCode').value;
+            const iframe = document.getElementById('output');
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            iframeDoc.open();
+            iframeDoc.write(code);
+            iframeDoc.close();
+        }
+
+// Add keydown event listener for Ctrl+R
+document.addEventListener('keydown', function(event) {
+    if (event.ctrlKey && event.key === 'r') {
+        event.preventDefault();  // Prevents the browser's default refresh action
+        runCode();  // Executes the runCode function
+    }
+});
+    </script>
+</body>
+</html>
