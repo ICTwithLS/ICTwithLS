@@ -1,8 +1,0 @@
-Students
-    Username - student
-    Password - ictls@01
-
-
-Paper Panel 
-    Username - paneluser
-    Password - lsictpanel@marking1
