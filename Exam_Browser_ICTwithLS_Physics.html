@@ -698,11 +698,6 @@
     </div>
 
     <div class="form-group">
-        <label for="studentId">Student ID Number (Start with "OLT" or "OLR")</label>
-        <input type="text" id="studentId" placeholder="ENTER STUDENT ID" required>
-    </div>
-
-    <div class="form-group">
         <label for="examPassword">Examination Access Code (This exam is locked. Your invigilator will provide the start password).</label>
         <input type="password" id="examPassword" placeholder="ENTER 6-DIGIT CODE" maxlength="6" required>
     </div>
@@ -898,22 +893,19 @@ function getDeadlineInfo() {
 
 function startExam() {
     const name = document.getElementById("studentName").value.trim();
-    const studentId = document.getElementById("studentId").value.trim();
     const password = document.getElementById("examPassword").value.trim();
     const button = document.querySelector('button');
 
     document.querySelectorAll('input').forEach(input => input.classList.remove('invalid', 'valid'));
 
-    if (!name || !studentId || !password) {
+    if (!name || !password) {
         if (!name) document.getElementById("studentName").classList.add('invalid');
-        if (!studentId) document.getElementById("studentId").classList.add('invalid');
         if (!password) document.getElementById("examPassword").classList.add('invalid');
         alert("ERROR: ALL FIELDS ARE MANDATORY");
         return;
     }
 
     document.getElementById("studentName").classList.add('valid');
-    document.getElementById("studentId").classList.add('valid');
 
     button.classList.add('loading');
     button.textContent = 'AUTHENTICATING...';
@@ -949,7 +941,7 @@ function startExam() {
             document.getElementById("setup").style.display = "none";
             document.getElementById("examArea").style.display = "flex";
             
-            const studentInfoText = `${name.toUpperCase()} (ID: ${studentId})`;
+            const studentInfoText = `${name.toUpperCase()}`;
             document.getElementById("studentInfo").textContent = studentInfoText;
             document.getElementById("overlayStudentInfo").textContent = studentInfoText;
 
@@ -1163,6 +1155,7 @@ function closePopup() {
 
 </body>
 </html>
+
 
 
 
