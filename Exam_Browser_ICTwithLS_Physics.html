@@ -801,23 +801,22 @@
 
 let countdownInterval;
 let examDuration = 2 * 3600; // 3 hours in seconds (backup duration)
-const correctPassword = "296748";
+const correctPassword = "540979";
 
 // Deadline configuration - Set your specific deadline time here
-const DEADLINE_HOUR = 22;    // 24-hour format (0-23)
-const DEADLINE_MINUTE = 10;   // Minutes (0-59)
-const DEADLINE_DATE = "2025-08-28";  // Set specific date or null for today/tomorrow
+const DEADLINE_HOUR = 10;    // 24-hour format (0-23)
+const DEADLINE_MINUTE = 40;   // Minutes (0-59)
+const DEADLINE_DATE = "2025-09-06";  // Set specific date or null for today/tomorrow
 
-const paperlink = "https://drive.google.com/file/d/1woSBp1iwjJf6sXELZw0eFRb-Z0nREi2r/preview"; // Link to the exam paper
-const Submitanswers = "https://forms.gle/n2mMtfCx2SHgUu9H9"; // Link to submit answers (change to your form link)
+const paperlink = "https://drive.google.com/file/d/18ys05C1lEm8DH38Y9cOmg6jr2naIeymK/preview"; // Link to the exam paper
+const Submitanswers = ""; // Link to submit answers (change to your form link)                                             https://forms.gle/n2mMtfCx2SHgUu9H9
 
 let examData = {};
 
 //Paper Detils in Login View------------
-const Subject = "G.C.E. O/L ICT"
-const Paperno = "Paper 05"
-const Duration = "3 Hours"
-
+const Subject = "ICT"
+const Paperno = "Grade 08 ICT Test - SM"
+const Duration = "1 Hour 30min"
 
    
 document.getElementById('paperdetails').innerHTML = `Subject: ${Subject} | Paper No: ${Paperno} | Duration: ${Duration} | Date: ${DEADLINE_DATE}`
@@ -1219,6 +1218,7 @@ document.addEventListener("cut", (e) => {
 
 </body>
 </html>
+
 
 
 
