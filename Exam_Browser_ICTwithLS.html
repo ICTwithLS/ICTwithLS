@@ -674,7 +674,7 @@
 
 <header>
     <div class="header-title">ICTwithLS EXAMINATION MANAGEMENT SYSTEM</div>
-    <div class="header-subtitle">Subject: G.C.E. O/L ICT | Paper No: Paper 05 | Duration: 3 Hours</div>
+    <div class="header-subtitle"><div id="paperdetails"></div></div>
 </header>
 
 <div class="container" id="setup">
@@ -792,11 +792,14 @@ const DEADLINE_DATE = "2025-08-16";  // Set specific date or null for today/tomo
 
 const paperlink = "https://drive.google.com/file/d/1UAHOz0wWLHDWaollvaMIHGh8lQxY--aH/preview"; // Link to the exam paper
 
+//Paper Details Update
+const Subject = "G.C.E. O/L ICT"
+const Paperno = "Paper 05"
+const Duration = "3 Hours"
+
 let examData = {};
-
-
-
-
+   
+document.getElementById('paperdetails').innerHTML = `Subject: ${Subject} | Paper No: ${Paperno} | Duration: ${Duration} | Date: ${DEADLINE_DATE}`
 
 // Auto-capitalize input text
 document.addEventListener('DOMContentLoaded', function() {
@@ -1132,6 +1135,7 @@ window.examTimer = {
 
 </body>
 </html>
+
 
 
 
