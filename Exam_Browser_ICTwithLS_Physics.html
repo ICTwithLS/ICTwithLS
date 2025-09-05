@@ -1166,10 +1166,60 @@ function closePopup() {
     popup.style.display = "none"; // hide overlay
 }
 
+   // Disable right-click context menu
+document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+// Disable specific key combinations
+document.addEventListener("keydown", (e) => {
+    // Block Ctrl+P (print)
+    if (e.ctrlKey && e.key.toLowerCase() === "p") {
+        e.preventDefault();
+        alert("Printing is disabled during the exam.");
+    }
+
+    // Block Ctrl+C, Ctrl+V, Ctrl+X (copy, paste, cut)
+    if (e.ctrlKey && ["c", "v", "x"].includes(e.key.toLowerCase())) {
+        e.preventDefault();
+        alert("Copy, paste, and cut are disabled during the exam.");
+    }
+
+    // Block Ctrl+Shift+I (Inspect / DevTools)
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i") {
+        e.preventDefault();
+        alert("Developer tools are disabled during the exam.");
+    }
+
+    // Optional: Block F12 (DevTools)
+    if (e.key === "F12") {
+        e.preventDefault();
+        alert("Developer tools are disabled during the exam.");
+    }
+});
+
+// Extra protection: disable paste via mouse (input fields)
+document.addEventListener("paste", (e) => {
+    e.preventDefault();
+    alert("Pasting is disabled during the exam.");
+});
+
+// Extra protection: disable copy via mouse
+document.addEventListener("copy", (e) => {
+    e.preventDefault();
+    alert("Copying is disabled during the exam.");
+});
+
+// Extra protection: disable cut via mouse
+document.addEventListener("cut", (e) => {
+    e.preventDefault();
+    alert("Cut is disabled during the exam.");
+});
+
+
 </script>
 
 </body>
 </html>
+
 
 
 
