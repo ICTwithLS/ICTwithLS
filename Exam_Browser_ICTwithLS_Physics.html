@@ -675,7 +675,7 @@
 
 <header>
     <div class="header-title">EXAMINATION MANAGEMENT SYSTEM</div>
-    <div class="header-subtitle">Subject: G.C.E. A/L Physics | Paper No: MCQ Paper 03 | Duration: 2 Hours</div>
+    <div class="header-subtitle"><div id="paperdetails"></div> </div>
 </header>
 
 <div class="container" id="setup">
@@ -813,12 +813,16 @@ const Submitanswers = "https://forms.gle/n2mMtfCx2SHgUu9H9"; // Link to submit a
 
 let examData = {};
 
-
+//Paper Detils in Login View------------
+const Subject = "G.C.E. O/L ICT"
+const Paperno = "Paper 05"
+const Duration = "3 Hours"
 
 
    
+document.getElementById('paperdetails').innerHTML = `Subject: ${Subject} | Paper No: ${Paperno} | Duration: ${Duration} | Date: ${DEADLINE_DATE}`
 
-
+   
 // Auto-capitalize input text
 document.addEventListener('DOMContentLoaded', function() {
     const textInputs = document.querySelectorAll('input[type="text"]');
@@ -1166,6 +1170,7 @@ function closePopup() {
 
 </body>
 </html>
+
 
 
 
