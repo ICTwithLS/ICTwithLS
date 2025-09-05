@@ -834,22 +834,31 @@
 
 
 
+
+
         let countdownInterval;
         let examDuration = 3 * 3600; // 3 hours in seconds (backup duration)
-        const correctPassword = "540979";
+        const correctPassword = ["540979", "12"];
 
         // Deadline configuration - Set your specific deadline time here
         const DEADLINE_HOUR = 10;    // 24-hour format (0-23)
         const DEADLINE_MINUTE = 40;   // Minutes (0-59)
         const DEADLINE_DATE = "2025-09-06";  // Set specific date or null for today/tomorrow
 
-        const paperlink = "https://drive.google.com/file/d/1o7wk95AC3wGqiMgy5p9F0RQOTpzg1lle/preview"; // Link to the exam paper
+        const paperLinks = [
+            "https://drive.google.com/file/d/1o7wk95AC3wGqiMgy5p9F0RQOTpzg1lle/preview",  //EM Paper
+            "https://drive.google.com/file/d/18ys05C1lEm8DH38Y9cOmg6jr2naIeymK/preview"  //SM Paper
+        ];
+
+
+        let paperlink = getPaperLink(); // Appier Paper link------------
+
         const Submitanswers = ""; // Link to submit answers (change to your form link) MCQ   (MCQ OMR SHeet link - https://forms.gle/41GYEgknXxD3T5g76)
 
 
         //Paper Details Update
-        const Subject = "Information and Communication Technology"        //G.C.E. O/L ICT
-        const Paperno = "Grade 08 Year-End ICT Test"
+        const Subject = "G8 ICT"        //G.C.E. O/L ICT
+        const Paperno = "Year-End ICT Test"
         const Duration = "1 Hour 30min"
 
 
@@ -858,6 +867,25 @@
 
 
 
+
+
+
+
+
+
+
+        // Check the corresponding Paper with Access Code
+        function getPaperLink() {
+            const password = document.getElementById("examPassword").value.trim();
+            // Find index of the password in the correctPassword array
+            const index = correctPassword.indexOf(password);
+
+            if (index !== -1) {
+                return paperLinks[index]; // Return corresponding paper link
+            } else {
+                return null; // Invalid password
+            }
+        }
 
 
         let examData = {};
@@ -971,7 +999,7 @@
             button.textContent = 'AUTHENTICATING...';
 
             setTimeout(() => {
-                if (password !== correctPassword) {
+                if (!correctPassword.includes(password)) {
                     document.getElementById("examPassword").classList.add('invalid');
                     button.classList.remove('loading');
                     button.classList.add('error');
@@ -1006,7 +1034,8 @@
                     document.getElementById("overlayStudentInfo").textContent = studentInfoText;
 
                     const iframe = document.getElementById("examPaper");
-                    iframe.src = paperlink;
+                    
+                    iframe.src = getPaperLink();
 
                     if (document.documentElement.requestFullscreen) {
                         document.documentElement.requestFullscreen();
@@ -1265,5 +1294,3 @@
 </body>
 
 </html>
-
-
