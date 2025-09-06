@@ -808,15 +808,15 @@ const DEADLINE_HOUR = 10;    // 24-hour format (0-23)
 const DEADLINE_MINUTE = 40;   // Minutes (0-59)
 const DEADLINE_DATE = "2025-09-06";  // Set specific date or null for today/tomorrow
 
-const paperlink = "https://drive.google.com/file/d/18ys05C1lEm8DH38Y9cOmg6jr2naIeymK/preview"; // Link to the exam paper
-const Submitanswers = ""; // Link to submit answers (change to your form link)                                             https://forms.gle/n2mMtfCx2SHgUu9H9
+const paperlink = "https://drive.google.com/file/d/1RM1-RVmIdN170koPr47cK_bdZdcz6mPn/preview"; // Link to the exam paper
+const Submitanswers = "https://forms.gle/n2mMtfCx2SHgUu9H9"; // Link to submit answers (change to your form link)                                             
 
 let examData = {};
 
 //Paper Detils in Login View------------
-const Subject = "ICT"
-const Paperno = "Grade 08 ICT Test - SM"
-const Duration = "1 Hour 30min"
+const Subject = "G.C.E A/L Physics"
+const Paperno = "Paper 07 - MCQ"
+const Duration = "3H"
 
    
 document.getElementById('paperdetails').innerHTML = `Subject: ${Subject} | Paper No: ${Paperno} | Duration: ${Duration} | Date: ${DEADLINE_DATE}`
@@ -1218,6 +1218,7 @@ document.addEventListener("cut", (e) => {
 
 </body>
 </html>
+
 
 
 
