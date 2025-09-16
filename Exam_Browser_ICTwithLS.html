@@ -477,7 +477,7 @@
 
             .final-message {
                 font-size: 16px;
-                padding: 40px 20px;   
+                padding: 40px 20px;
             }
 
             .exam-icon {
@@ -705,6 +705,40 @@
             padding: 1rem;
             font-size: 0.9rem;
         }
+
+        #mcq-submit:hover {
+            background-color: #bb2d3b;
+        }
+
+        /* The alert message box */
+        .alert {
+            padding: 10px;
+            background-color: #f44336;
+            /* Red */
+            color: white;
+            opacity: 1;
+            transition: opacity 0.6s;
+            /* 600ms to fade out */
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        /* The close button */
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        /* Hover effect on close button */
+        .closebtn:hover {
+            color: black;
+        }
     </style>
 </head>
 
@@ -757,7 +791,7 @@
             <input type="password" id="examPassword" placeholder="ENTER 6-DIGIT CODE" maxlength="6" required>
         </div>
 
-        <button onclick="startExam()">START THE EXAMINATION</button>
+        <button onclick="startExam()" id="startExamBtn">START THE EXAMINATION</button>
     </div>
 
     <div class="exam-area" id="examArea">
@@ -769,8 +803,38 @@
                 <span class="status-indicator"></span>
                 <span class="student-label">CANDIDATE:</span>
                 <span id="studentInfo"></span>
+
+                <!-- Submit MCQ Popup -->
+                <span id="mcq-submit" onclick="showPopup(Submitanswers)" style="
+        display: inline-block;
+        margin-left: 60px;
+        font-weight: bold;
+        text-align: center;
+        padding: 8px 16px;
+        background-color: #dc3545;
+        color: #ffffff;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;">
+                    MCQ Submit
+                </span>
             </div>
             <div>
+
+                <!-- Refresh Paper Frame -->
+                <span id="reloadPaperBtn" style="
+        display: inline-block;
+        margin-right: 40px;
+        font-weight: bold;
+        text-align: center;
+        padding: 8px 16px;
+        background-color: #dc3545;
+        color: #ffffff;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;">
+                    🔄 Reload Paper
+                </span>
                 <span style="margin-right: 15px; font-weight: bold;">TIME REMAINING:</span>
                 <span id="timerDisplay" class="timer-display"></span>
             </div>
@@ -836,18 +900,18 @@
 
 
 
+
         let countdownInterval;
-        let examDuration = 2 * 3600; // 3 hours in seconds (backup duration)
-        const correctPassword = ["394818"];        //add comma when ur are add more access codes
+        const correctPassword = ["456859"];        //add comma when ur are add more access codes
 
         // Deadline configuration - Set your specific deadline time here
         const DEADLINE_HOUR = 16;    // 24-hour format (0-23)
         const DEADLINE_MINUTE = 5;   // Minutes (0-59)
-        const DEADLINE_DATE = "2025-09-16";  // Set specific date or null for today/tomorrow
+        const DEADLINE_DATE = "2025-09-17";  // Set specific date or null for today/tomorrow
 
         const paperLinks = [
             "https://drive.google.com/file/d/16V4BPBsjfiZrPvd1Z1NRiARfbQ6tz2qo/preview"  //EM Paper                if ur are add more then add comma end of the link ","
-            // "https://drive.google.com/file/d/18ys05C1lEm8DH38Y9cOmg6jr2naIeymK/preview"  //SM Paper
+            //"https://drive.google.com/file/d/18ys05C1lEm8DH38Y9cOmg6jr2naIeymK/preview"  //SM Paper
         ];
 
 
@@ -859,7 +923,7 @@
         //Paper Details Update
         const Subject = "G.C.E. A/L ICT"
         const Paperno = "Final Paper 01 - MCQ"
-        const Duration = "2H"
+        const Duration = "4"
 
 
 
@@ -872,7 +936,7 @@
 
 
 
-
+        let examDuration = `${Duration}` * 3600;
 
         // Check the corresponding Paper with Access Code
         function getPaperLink() {
@@ -978,22 +1042,19 @@
 
         function startExam() {
             const name = document.getElementById("studentName").value.trim();
-            const studentId = document.getElementById("studentId").value.trim();
             const password = document.getElementById("examPassword").value.trim();
             const button = document.querySelector('button');
 
             document.querySelectorAll('input').forEach(input => input.classList.remove('invalid', 'valid'));
 
-            if (!name || !studentId || !password) {
+            if (!name || !password) {
                 if (!name) document.getElementById("studentName").classList.add('invalid');
-                if (!studentId) document.getElementById("studentId").classList.add('invalid');
                 if (!password) document.getElementById("examPassword").classList.add('invalid');
                 alert("ERROR: ALL FIELDS ARE MANDATORY");
                 return;
             }
 
             document.getElementById("studentName").classList.add('valid');
-            document.getElementById("studentId").classList.add('valid');
 
             button.classList.add('loading');
             button.textContent = 'AUTHENTICATING...';
@@ -1016,77 +1077,86 @@
                 button.classList.add('success');
                 button.textContent = 'ACCESS GRANTED - LOADING...';
 
-                // Check if deadline has already passed
-                const timeInfo = getTimeUntilDeadline();
-                if (timeInfo.deadline_passed) {
-                    // End exam if time expired
-                    if (timeInfo.is_expired || timeInfo.total_seconds <= 0) {
-                        endExam(examData.studentName || name.toUpperCase(), "DEADLINE REACHED");
-                    }
+                const deadlineTime = getDeadlineTimestamp();
+                const maxExamTime = Date.now() + examDuration * 1000;
+
+                let endTime = localStorage.getItem("examEndTime");
+                if (endTime) {
+                    // ✅ Resume saved session
+                    endTime = parseInt(endTime);
+                } else {
+                    // ✅ First time → pick the earlier of deadline or duration
+                    endTime = Math.min(deadlineTime, maxExamTime);
+                    localStorage.setItem("examEndTime", endTime);
                 }
+
+                localStorage.setItem("studentName", name.toUpperCase());
 
                 setTimeout(() => {
                     document.getElementById("setup").style.display = "none";
                     document.getElementById("examArea").style.display = "flex";
 
-                    const studentInfoText = `${name.toUpperCase()} (ID: ${studentId})`;
+                    const studentInfoText = `${name.toUpperCase()}`;
                     document.getElementById("studentInfo").textContent = studentInfoText;
                     document.getElementById("overlayStudentInfo").textContent = studentInfoText;
 
                     const iframe = document.getElementById("examPaper");
-                    
                     iframe.src = getPaperLink();
 
                     if (document.documentElement.requestFullscreen) {
                         document.documentElement.requestFullscreen();
                     }
 
-                    // Store exam data with deadline time
-                    const deadlineTime = getDeadlineTimestamp();
-                    const maxExamTime = Date.now() + examDuration * 1000;
-
-                    // Use whichever comes first: exam duration or deadline
-                    const endTime = Math.min(deadlineTime, maxExamTime);
-
                     examData = {
                         endTime: endTime,
                         deadlineTime: deadlineTime,
-                        studentName: name,
-                        studentId: studentId,
+                        studentName: name.toUpperCase(),
                         startTime: Date.now()
                     };
 
                     startCountdown();
-
-                    // Show deadline info
-                    console.log('Exam started. Deadline info:', getDeadlineInfo());
                 }, 2000);
             }, 1500);
         }
 
+
         function startCountdown() {
-            const updateTimer = () => {
-                const timeInfo = getTimeUntilDeadline();
+            const storedEndTime = localStorage.getItem("examEndTime");
+            const storedName = localStorage.getItem("studentName") || "Student";
 
-                // Update display
-                updateTimerDisplay(timeInfo.total_seconds);
+            if (!storedEndTime) {
+                endExam(storedName, "NO ACTIVE EXAM SESSION");
+                return;
+            }
 
-                // Check for warnings
-                if (timeInfo.is_warning && timeInfo.total_seconds > 0) {
+            const savedEndTime = parseInt(storedEndTime);
+
+            function updateTimer() {
+                const now = Date.now();
+
+                // 🔹 Always re-check deadline
+                const deadlineTime = getDeadlineTimestamp();
+                const effectiveEndTime = Math.min(savedEndTime, deadlineTime);
+
+                let remaining = Math.floor((effectiveEndTime - now) / 1000);
+
+                if (remaining <= 0) {
+                    clearInterval(countdownInterval);
+                    localStorage.removeItem("examEndTime");
+                    localStorage.removeItem("studentName");
+                    endExam(storedName, "TIME EXPIRED");
+                    return;
+                }
+
+                updateTimerDisplay(remaining);
+
+                if (remaining <= 600) {
                     document.getElementById("timerDisplay").classList.add("timer-warning");
                     document.getElementById("overlayTimerDisplay").classList.add("timer-warning");
                 }
+            }
 
-                // End exam if time expired
-                if (timeInfo.is_expired || timeInfo.total_seconds <= 0) {
-                    endExam(examData.studentName || $[name], "DEADLINE REACHED");
-                }
-            };
-
-            // Initial update
             updateTimer();
-
-            // Update every second
             countdownInterval = setInterval(updateTimer, 1000);
         }
 
@@ -1103,6 +1173,8 @@
         function endExam(name, reason = "TIME EXPIRED") {
             clearInterval(countdownInterval);
             exitFullScreen();
+            localStorage.removeItem("examEndTime");
+            localStorage.removeItem("studentName");
 
             const deadlineInfo = getDeadlineInfo();
             examData = {};
@@ -1288,20 +1360,43 @@
             alert("Cut is disabled during the exam.");
         });
 
+        document.getElementById("reloadPaperBtn").addEventListener("click", function () {
+            const iframe = document.getElementById("examPaper");
+            if (iframe && iframe.src) {
+                const oldSrc = iframe.src;
+                iframe.src = ""; // Clear first to force reload
+                setTimeout(() => {
+                    iframe.src = oldSrc; // Reload the paper
+                }, 200);
+            }
+        });
+
+        // Trigger startExam() when pressing Enter
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault(); // Prevent accidental form submission
+                document.getElementById("startExamBtn").click();
+            }
+        });
+
+        // Get all elements with class="closebtn"
+        var close = document.getElementsByClassName("closebtn");
+
+        // Loop through all close buttons
+        for (let i = 0; i < close.length; i++) {
+            close[i].onclick = function () {
+                var div = this.parentElement;
+                div.style.opacity = "0";  // fade out
+
+                // Hide the div after the transition
+                setTimeout(function () {
+                    div.style.display = "none";
+                }, 600); // matches CSS transition duration
+            }
+        }
     </script>
 
 
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
