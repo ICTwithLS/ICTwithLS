@@ -928,7 +928,8 @@
         //Paper Details Update
         const Subject = "G.C.E. A/L ICT"
         const Paperno = "Final Paper 01 - MCQ"
-        const Duration = "2"
+        const DurationHours = 2;    // 2 hours
+        const DurationMinutes = 30; // 30 minutes
 
 
 
@@ -941,7 +942,8 @@
 
 
 
-        let examDuration = `${Duration}` * 3600;
+
+        let examDuration = DurationHours * 3600 + DurationMinutes * 60; 
 
         // Check the corresponding Paper with Access Code
         function getPaperLink() {
@@ -1408,5 +1410,6 @@
 </body>
 
 </html>
+
 
 
