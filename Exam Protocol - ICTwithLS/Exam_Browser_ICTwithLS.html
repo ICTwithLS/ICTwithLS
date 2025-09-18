@@ -907,15 +907,15 @@
 
 
         let countdownInterval;
-        const correctPassword = ["456859"];        //add comma when ur are add more access codes
+        const correctPassword = ["851348"];        //add comma when ur are add more access codes
 
         // Deadline configuration - Set your specific deadline time here
-        const DEADLINE_HOUR = 16;    // 24-hour format (0-23)
-        const DEADLINE_MINUTE = 5;   // Minutes (0-59)
-        const DEADLINE_DATE = "2025-09-17";  // Set specific date or null for today/tomorrow
+        const DEADLINE_HOUR = 22;    // 24-hour format (0-23)
+        const DEADLINE_MINUTE = 15;   // Minutes (0-59)
+        const DEADLINE_DATE = "2025-09-19";  // Set specific date or null for today/tomorrow
 
         const paperLinks = [
-            "https://drive.google.com/file/d/16V4BPBsjfiZrPvd1Z1NRiARfbQ6tz2qo/preview"  //EM Paper                if ur are add more then add comma end of the link ","
+            "https://drive.google.com/file/d/1KxDwkGY1LJ8dY60Kbzh6zI12wVk78SEA/preview"  //EM Paper                if ur are add more then add comma end of the link ","
             //"https://drive.google.com/file/d/18ys05C1lEm8DH38Y9cOmg6jr2naIeymK/preview"  //SM Paper
         ];
 
@@ -926,9 +926,10 @@
 
 
         //Paper Details Update
-        const Subject = "G.C.E. A/L ICT"
-        const Paperno = "Final Paper 01 - MCQ"
-        const Duration = "2"
+        const Subject = "G.C.E. O/L ICT"
+        const Paperno = "Final Paper 07"
+        const DurationHours = 3;    // 2 hours
+        const DurationMinutes = 10; // 30 minutes
 
 
 
@@ -941,7 +942,8 @@
 
 
 
-        let examDuration = `${Duration}` * 3600;
+
+        let examDuration = DurationHours * 3600 + DurationMinutes * 60;
 
         // Check the corresponding Paper with Access Code
         function getPaperLink() {
@@ -959,7 +961,7 @@
 
         let examData = {};
 
-        document.getElementById('paperdetails').innerHTML = `Subject: ${Subject} | Paper No: ${Paperno} | Duration: ${Duration} | Date: ${DEADLINE_DATE}`
+        document.getElementById('paperdetails').innerHTML = `Subject: ${Subject} | Paper No: ${Paperno} | Duration: ${DurationHours}H ${DurationMinutes}M | Date: ${DEADLINE_DATE}`
 
         // Auto-capitalize input text
         document.addEventListener('DOMContentLoaded', function () {
@@ -1046,9 +1048,9 @@
         }
 
         function startExam() {
-            const name = document.getElementById("studentName").value.trim();
+            const name = document.getElementById("studentName").value.trim().toUpperCase();
             const password = document.getElementById("examPassword").value.trim();
-            const button = document.querySelector('button');
+            const button = document.getElementById('startExamBtn');
 
             document.querySelectorAll('input').forEach(input => input.classList.remove('invalid', 'valid'));
 
@@ -1058,8 +1060,6 @@
                 alert("ERROR: ALL FIELDS ARE MANDATORY");
                 return;
             }
-
-            document.getElementById("studentName").classList.add('valid');
 
             button.classList.add('loading');
             button.textContent = 'AUTHENTICATING...';
@@ -1085,23 +1085,30 @@
                 const deadlineTime = getDeadlineTimestamp();
                 const maxExamTime = Date.now() + examDuration * 1000;
 
-                let endTime = localStorage.getItem("examEndTime");
-                if (endTime) {
-                    // ✅ Resume saved session
-                    endTime = parseInt(endTime);
+                // Check for previously stored session
+                const storedName = localStorage.getItem("studentName");
+                const storedPassword = localStorage.getItem("examPassword");
+                const storedPaper = localStorage.getItem("examPaperNo");
+
+                let endTime;
+
+                if (storedName === name && storedPassword === password && storedPaper === Paperno) {
+                    // ✅ Resume existing session
+                    endTime = parseInt(localStorage.getItem("examEndTime"));
                 } else {
-                    // ✅ First time → pick the earlier of deadline or duration
+                    // ✅ New student/session → reset timer
                     endTime = Math.min(deadlineTime, maxExamTime);
                     localStorage.setItem("examEndTime", endTime);
+                    localStorage.setItem("studentName", name);
+                    localStorage.setItem("examPassword", password);
+                    localStorage.setItem("examPaperNo", Paperno);
                 }
-
-                localStorage.setItem("studentName", name.toUpperCase());
 
                 setTimeout(() => {
                     document.getElementById("setup").style.display = "none";
                     document.getElementById("examArea").style.display = "flex";
 
-                    const studentInfoText = `${name.toUpperCase()}`;
+                    const studentInfoText = `${name}`;
                     document.getElementById("studentInfo").textContent = studentInfoText;
                     document.getElementById("overlayStudentInfo").textContent = studentInfoText;
 
@@ -1115,7 +1122,7 @@
                     examData = {
                         endTime: endTime,
                         deadlineTime: deadlineTime,
-                        studentName: name.toUpperCase(),
+                        studentName: name,
                         startTime: Date.now()
                     };
 
@@ -1123,6 +1130,7 @@
                 }, 2000);
             }, 1500);
         }
+
 
 
         function startCountdown() {
@@ -1138,8 +1146,6 @@
 
             function updateTimer() {
                 const now = Date.now();
-
-                // 🔹 Always re-check deadline
                 const deadlineTime = getDeadlineTimestamp();
                 const effectiveEndTime = Math.min(savedEndTime, deadlineTime);
 
@@ -1149,6 +1155,8 @@
                     clearInterval(countdownInterval);
                     localStorage.removeItem("examEndTime");
                     localStorage.removeItem("studentName");
+                    localStorage.removeItem("examPassword");
+                    localStorage.removeItem("examPaperNo");
                     endExam(storedName, "TIME EXPIRED");
                     return;
                 }
@@ -1164,6 +1172,7 @@
             updateTimer();
             countdownInterval = setInterval(updateTimer, 1000);
         }
+
 
         function updateTimerDisplay(seconds) {
             const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
@@ -1345,6 +1354,9 @@
                 e.preventDefault();
                 alert("Developer tools are disabled during the exam.");
             }
+        });
+        window.addEventListener("blur", () => {
+            alert("Switching tabs is not allowed during the exam.");
         });
 
         // Extra protection: disable paste via mouse (input fields)
