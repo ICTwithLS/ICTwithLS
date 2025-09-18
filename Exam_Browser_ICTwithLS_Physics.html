@@ -1342,6 +1342,11 @@
             }
         });
 
+        window.addEventListener("blur", () => {
+            alert("Switching tabs is not allowed during the exam.");
+        });
+
+
         // Extra protection: disable paste via mouse (input fields)
         document.addEventListener("paste", (e) => {
             e.preventDefault();
@@ -1399,5 +1404,6 @@
 </body>
 
 </html>
+
 
 
