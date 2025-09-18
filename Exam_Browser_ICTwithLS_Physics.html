@@ -927,7 +927,8 @@
         //Paper Detils in Login View------------
         const Subject = "G.C.E A/L Physics"
         const Paperno = "Final MCQ Paper 06"
-        const Duration = "2"
+        const DurationHours = 2;    // 2 hours
+        const DurationMinutes = 00; // 30 minutes
 
 
 
@@ -935,7 +936,13 @@
 
 
 
-        let examDuration = `${Duration}` * 3600;
+
+
+
+
+
+
+        let examDuration = DurationHours * 3600 + DurationMinutes * 60; 
 
         document.getElementById('paperdetails').innerHTML = `Subject: ${Subject} | Paper No: ${Paperno} | Duration: ${Duration}H | Date: ${DEADLINE_DATE}`
 
@@ -1404,6 +1411,7 @@
 </body>
 
 </html>
+
 
 
 
