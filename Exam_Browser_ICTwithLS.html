@@ -1299,19 +1299,38 @@
 
         // Console commands for testing/monitoring
         window.examTimer = {
-            getStatus: getCurrentTimeStatus,
-            getRemaining: getRemainingTimeText,
-            getDeadline: () => `${String(DEADLINE_HOUR).padStart(2, '0')}:${String(DEADLINE_MINUTE).padStart(2, '0')}`,
-            setDeadline: (hour, minute) => {
-                if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) {
-                    DEADLINE_HOUR = hour;
-                    DEADLINE_MINUTE = minute;
-                    console.log(`Deadline updated to ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`);
-                } else {
-                    console.error('Invalid time format. Use 24-hour format: hour (0-23), minute (0-59)');
-                }
+    getStatus: getCurrentTimeStatus,
+    getRemaining: getRemainingTimeText,
+    getDeadline: () => `${String(DEADLINE_HOUR).padStart(2, '0')}:${String(DEADLINE_MINUTE).padStart(2, '0')}`,
+    setDeadline: (hour, minute) => {
+        // validate inputs
+        if (!Number.isInteger(hour) || !Number.isInteger(minute)) {
+            console.error('Hour and minute must be integers.');
+            return;
+        }
+        if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) {
+            DEADLINE_HOUR = hour;
+            DEADLINE_MINUTE = minute;
+
+            // Update any visible deadline text on the page
+            const detailsEl = document.getElementById('paperdetails');
+            if (detailsEl) {
+                detailsEl.innerHTML = `Subject: ${Subject} | Paper No: ${Paperno} | Duration: ${DurationHours}H ${DurationMinutes}M | Date: ${DEADLINE_DATE} ${String(DEADLINE_HOUR).padStart(2,'0')}:${String(DEADLINE_MINUTE).padStart(2,'0')}`;
             }
-        };
+
+            console.log(`Deadline updated to ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`);
+
+            // If a countdown is running, restart it so it picks up the new deadline
+            if (typeof countdownInterval !== 'undefined') {
+                clearInterval(countdownInterval);
+                startCountdown();
+            }
+        } else {
+            console.error('Invalid time format. Use 24-hour format: hour (0-23), minute (0-59)');
+        }
+    }
+};
+
 
         function showPopup(url) {
             const popup = document.getElementById("popupOverlay");
@@ -1418,3 +1437,4 @@
 </body>
 
 </html>
+
