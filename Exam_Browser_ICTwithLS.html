@@ -1375,8 +1375,12 @@
                 alert("Developer tools are disabled during the exam.");
             }
         });
+        
         window.addEventListener("blur", () => {
-            alert("Switching tabs is not allowed during the exam.");
+            // Check if the document is hidden (real tab switch)
+            if (document.hidden) {
+                alert("Switching tabs is not allowed during the exam.");
+            }
         });
 
         // Extra protection: disable paste via mouse (input fields)
@@ -1437,6 +1441,7 @@
 </body>
 
 </html>
+
 
 
 
