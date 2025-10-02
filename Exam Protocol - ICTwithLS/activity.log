@@ -1,0 +1,44 @@
+{"action":"log_activity","event":"Tool selected: pen (#0000FF)","student":"MANEL","timestamp":"2025-10-02T04:43:50.887Z","data":null}
+{"action":"log_activity","event":"Tab\/Window switch detected","student":"MANEL","timestamp":"2025-10-02T04:43:56.244Z","data":{"focusLossCount":1}}
+{"action":"log_activity","event":"Tab\/Window switch detected","student":"MANEL","timestamp":"2025-10-02T04:44:06.442Z","data":{"focusLossCount":2}}
+{"action":"log_activity","event":"Tab\/Window switch detected","student":"MANEL","timestamp":"2025-10-02T04:48:33.409Z","data":{"focusLossCount":3}}
+{"action":"log_activity","event":"Tool selected: pen (#0000FF)","student":"MANEL","timestamp":"2025-10-02T04:48:33.661Z","data":null}
+{"action":"log_activity","event":"Tab\/Window switch detected","student":"MANEL","timestamp":"2025-10-02T04:55:23.244Z","data":{"focusLossCount":1}}
+{"action":"log_activity","event":"Tab\/Window switch detected","student":"MANEL","timestamp":"2025-10-02T04:55:44.083Z","data":{"focusLossCount":2}}
+{"action":"log_activity","event":"Tab\/Window switch detected","student":"MANEL","timestamp":"2025-10-02T04:56:08.594Z","data":{"focusLossCount":3}}
+{"action":"log_activity","event":"Annotation bar opened","student":"LAKINDU","timestamp":"2025-10-02T04:56:25.517Z","data":null}
+{"action":"log_activity","event":"Started drawing","student":"LAKINDU","timestamp":"2025-10-02T04:56:25.909Z","data":null}
+{"action":"log_activity","event":"Stopped drawing","student":"LAKINDU","timestamp":"2025-10-02T04:56:26.244Z","data":null}
+{"action":"log_activity","event":"Tool selected: pen (#0000FF)","student":"LAKINDU","timestamp":"2025-10-02T04:56:26.812Z","data":null}
+{"action":"log_activity","event":"Started drawing","student":"LAKINDU","timestamp":"2025-10-02T04:56:27.047Z","data":null}
+{"action":"log_activity","event":"Stopped drawing","student":"LAKINDU","timestamp":"2025-10-02T04:56:27.501Z","data":null}
+{"action":"log_activity","event":"Tool selected: pen (#000000)","student":"LAKINDU","timestamp":"2025-10-02T04:56:28.079Z","data":null}
+{"action":"log_activity","event":"Started drawing","student":"LAKINDU","timestamp":"2025-10-02T04:56:28.334Z","data":null}
+{"action":"log_activity","event":"Stopped drawing","student":"LAKINDU","timestamp":"2025-10-02T04:56:28.884Z","data":null}
+{"action":"log_activity","event":"Tool selected: eraser","student":"LAKINDU","timestamp":"2025-10-02T04:56:29.414Z","data":null}
+{"action":"log_activity","event":"Started drawing","student":"LAKINDU","timestamp":"2025-10-02T04:56:29.695Z","data":null}
+{"action":"log_activity","event":"Stopped drawing","student":"LAKINDU","timestamp":"2025-10-02T04:56:30.924Z","data":null}
+{"action":"log_activity","event":"Annotations cleared","student":"LAKINDU","timestamp":"2025-10-02T04:56:31.572Z","data":null}
+{"action":"log_activity","event":"Annotation bar closed","student":"LAKINDU","timestamp":"2025-10-02T04:56:35.989Z","data":null}
+{"action":"log_activity","event":"Tool selected: pen (#0000FF)","student":"Unknown","timestamp":"2025-10-02T04:58:12.953Z","data":null}
+{"action":"log_activity","event":"Tab\/Window switch detected","student":"Unknown","timestamp":"2025-10-02T04:58:13.218Z","data":{"focusLossCount":1}}
+{"action":"log_activity","event":"Tab\/Window switch detected","student":"Unknown","timestamp":"2025-10-02T04:58:32.727Z","data":{"focusLossCount":2}}
+{"action":"log_activity","event":"Tool selected: pen (#0000FF)","student":"Unknown","timestamp":"2025-10-02T04:58:47.623Z","data":null}
+{"action":"log_activity","event":"Tab\/Window switch detected","student":"Unknown","timestamp":"2025-10-02T04:58:49.146Z","data":{"focusLossCount":1}}
+{"action":"log_activity","event":"Tab\/Window switch detected","student":"Unknown","timestamp":"2025-10-02T04:58:57.997Z","data":{"focusLossCount":2}}
+{"action":"log_activity","event":"Tab\/Window switch detected","student":"Unknown","timestamp":"2025-10-02T04:59:07.117Z","data":{"focusLossCount":3}}
+{"action":"log_activity","event":"Annotation bar opened","student":"LAKINDU","timestamp":"2025-10-02T04:59:31.024Z","data":null}
+{"action":"log_activity","event":"Started drawing","student":"LAKINDU","timestamp":"2025-10-02T04:59:31.614Z","data":null}
+{"action":"log_activity","event":"Stopped drawing","student":"LAKINDU","timestamp":"2025-10-02T04:59:32.097Z","data":null}
+{"action":"log_activity","event":"Tool selected: pen (#0000FF)","student":"LAKINDU","timestamp":"2025-10-02T04:59:32.580Z","data":null}
+{"action":"log_activity","event":"Started drawing","student":"LAKINDU","timestamp":"2025-10-02T04:59:32.790Z","data":null}
+{"action":"log_activity","event":"Stopped drawing","student":"LAKINDU","timestamp":"2025-10-02T04:59:33.194Z","data":null}
+{"action":"log_activity","event":"Tool selected: pen (#000000)","student":"LAKINDU","timestamp":"2025-10-02T04:59:33.708Z","data":null}
+{"action":"log_activity","event":"Started drawing","student":"LAKINDU","timestamp":"2025-10-02T04:59:33.994Z","data":null}
+{"action":"log_activity","event":"Stopped drawing","student":"LAKINDU","timestamp":"2025-10-02T04:59:34.332Z","data":null}
+{"action":"log_activity","event":"Tool selected: eraser","student":"LAKINDU","timestamp":"2025-10-02T04:59:34.835Z","data":null}
+{"action":"log_activity","event":"Started drawing","student":"LAKINDU","timestamp":"2025-10-02T04:59:35.120Z","data":null}
+{"action":"log_activity","event":"Stopped drawing","student":"LAKINDU","timestamp":"2025-10-02T04:59:35.496Z","data":null}
+{"action":"log_activity","event":"Annotations cleared","student":"LAKINDU","timestamp":"2025-10-02T04:59:37.120Z","data":null}
+{"action":"log_activity","event":"Annotation bar closed","student":"LAKINDU","timestamp":"2025-10-02T04:59:38.537Z","data":null}
+{"action":"log_activity","event":"Tab\/Window switch detected","student":"LAKINDU","timestamp":"2025-10-02T04:59:43.670Z","data":{"focusLossCount":4}}

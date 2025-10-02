@@ -1,0 +1,37 @@
+[
+    {
+        "studentName": "PRABHASHSARA RATHNAYAKE",
+        "studentId": "ALR001",
+        "accessCode": "535777",
+        "timestamp": "2025-09-28T06:00:22.259Z",
+        "remainingTime": "03:09:59"
+    },
+    {
+        "studentName": "VISURA CHANMITH",
+        "studentId": "ALR003",
+        "accessCode": "964760",
+        "timestamp": "2025-09-28T17:59:01.478Z",
+        "remainingTime": "03:10:00"
+    },
+    {
+        "studentName": "VISURA CHANMITH",
+        "studentId": "ALR003",
+        "accessCode": "166310",
+        "timestamp": "2025-10-01T16:23:40.663Z",
+        "remainingTime": "02:00:00"
+    },
+    {
+        "studentName": "PRABHASHSARA RATHNAYAKE",
+        "studentId": "ALR 001",
+        "accessCode": "272076",
+        "timestamp": "2025-10-01T16:26:55.855Z",
+        "remainingTime": "01:59:59"
+    },
+    {
+        "studentName": "LAHIRUNI",
+        "studentId": "SHAMANGI",
+        "accessCode": "326559",
+        "timestamp": "2025-10-02T02:11:19.316Z",
+        "remainingTime": "03:09:59"
+    }
+]

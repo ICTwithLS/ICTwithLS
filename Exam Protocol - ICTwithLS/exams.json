@@ -1,0 +1,67 @@
+[
+    {
+        "subject": "G.C.E A\/L - ICT",
+        "paperNo": "FINAL 03 II - EM",
+        "durationHours": 3,
+        "durationMinutes": 10,
+        "examDate": "2025-09-29",
+        "deadline": "23:59",
+        "paperLink": "https:\/\/drive.google.com\/file\/d\/1fGHu36snVh49B8hsJlI4auq0z7yZ6o20\/preview",
+        "mcqLink": "",
+        "instructions": "This is the one before Last Paper to A\/L - 2025 ICT",
+        "accessCode": "535777",
+        "createdAt": "2025-09-27T16:39:47.218Z"
+    },
+    {
+        "subject": "G.C.E A\/L - ICT",
+        "paperNo": "FINAL 03 II - SM",
+        "durationHours": 3,
+        "durationMinutes": 10,
+        "examDate": "2025-09-29",
+        "deadline": "23:59",
+        "paperLink": "https:\/\/drive.google.com\/file\/d\/1imbfp2Z8HChEdSAuQpDBO8z3m-nOa1l7\/preview",
+        "mcqLink": "",
+        "instructions": "This is the one before ict paper for 2025 A\/L SM",
+        "accessCode": "964760",
+        "createdAt": "2025-09-27T16:42:08.054Z"
+    },
+    {
+        "subject": "G.C.E A\/L - ICT",
+        "paperNo": "FINAL 03 MCQ - SM",
+        "durationHours": 2,
+        "durationMinutes": 0,
+        "examDate": "2025-10-02",
+        "deadline": "23:59",
+        "paperLink": "https:\/\/drive.google.com\/file\/d\/1BvYckBuQFmPCGS_EwiBhcvNPFwQkQHci\/preview",
+        "mcqLink": "https:\/\/forms.gle\/w6mgYVginqmo1UQr8",
+        "instructions": "",
+        "accessCode": "166310",
+        "createdAt": "2025-09-27T16:44:42.630Z"
+    },
+    {
+        "subject": "G.C.E A\/L - ICT",
+        "paperNo": "FINAL 03 MCQ - EM",
+        "durationHours": 2,
+        "durationMinutes": 0,
+        "examDate": "2025-10-02",
+        "deadline": "23:59",
+        "paperLink": "https:\/\/drive.google.com\/file\/d\/17Z6RJOQpEJhv_CsAoI_ETeBHvF2hSBKY\/preview",
+        "mcqLink": "https:\/\/forms.gle\/w6mgYVginqmo1UQr8",
+        "instructions": "",
+        "accessCode": "272076",
+        "createdAt": "2025-09-27T16:45:42.621Z"
+    },
+    {
+        "subject": "G.C.E A\/L - PHYSICS",
+        "paperNo": "FINAL 04",
+        "durationHours": 3,
+        "durationMinutes": 10,
+        "examDate": "2025-10-02",
+        "deadline": "19:30",
+        "paperLink": "https:\/\/drive.google.com\/file\/d\/1202T7l5RMm_jdH2y-djoumGJ3sqH1ZXT\/preview",
+        "mcqLink": "",
+        "instructions": "This is the Final Paper 04 Paper for A\/L 2025",
+        "accessCode": "326559",
+        "createdAt": "2025-09-29T16:08:47.057Z"
+    }
+]
